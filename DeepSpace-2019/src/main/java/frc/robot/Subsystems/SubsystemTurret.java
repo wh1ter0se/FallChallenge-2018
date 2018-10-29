@@ -7,8 +7,13 @@
 
 package frc.robot.Subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.Constants;
+import frc.robot.Util.JoystickController;
 
 /**
  * Add your docs here.
@@ -17,12 +22,14 @@ public class SubsystemTurret extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
-  public SubsytemTurret() {
+  TalonSRX turret;
+
+  public SubsystemTurret() {
     turret = new TalonSRX(Constants.TurretID);
   }
 
   public void spin(Joystick joy) {
-    turret.set(ControlMode.PercentOutput, Util.Joystick.X_AXIS(joy));
+    turret.set(ControlMode.PercentOutput, JoystickController.X_AXIS(joy));
   }
 
   @Override

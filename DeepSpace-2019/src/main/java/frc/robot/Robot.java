@@ -7,10 +7,12 @@
 
 package frc.robot;
 
-import frc.robot.Subsystems.*;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Subsystems.SubsystemElevator;
+import frc.robot.Subsystems.SubsystemShooter;
+import frc.robot.Subsystems.SubsystemTurret;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -25,6 +27,10 @@ public class Robot extends IterativeRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
+  public static SubsystemElevator SUB_ELEVATOR;
+  public static SubsystemShooter  SUB_SHOOTER;
+  public static SubsystemTurret   SUB_TURRET;
+
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -35,9 +41,9 @@ public class Robot extends IterativeRobot {
     m_chooser.addObject("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
-    SUB_ELEVATOR = new SubsystemElevator;
-    SUB_SHOOTER  = new SubsystemShooter;
-    SUB_TURRET   = new SubsystemTurret;
+    SUB_ELEVATOR = new SubsystemElevator();
+    SUB_SHOOTER  = new SubsystemShooter();
+    SUB_TURRET   = new SubsystemTurret();
   }
 
   /**

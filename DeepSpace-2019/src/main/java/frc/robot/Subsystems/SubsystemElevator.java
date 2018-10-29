@@ -7,7 +7,13 @@
 
 package frc.robot.Subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.robot.Constants;
+import frc.robot.Util.JoystickController;
 
 /**
  * Add your docs here.
@@ -23,7 +29,7 @@ public class SubsystemElevator extends Subsystem {
   }
 
   public void rise(Joystick joy) {
-    elevator.set(ControlMode.PercentOutput, Util.Joystick.Y_AXIS(joy));
+    elevator.set(ControlMode.PercentOutput, JoystickController.Y_AXIS(joy));
   }
   
   @Override

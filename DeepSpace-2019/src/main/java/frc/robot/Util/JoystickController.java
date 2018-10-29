@@ -1,4 +1,8 @@
-public class Joystick {
+package frc.robot.Util;
+
+import edu.wpi.first.wpilibj.Joystick;
+
+public class JoystickController {
 
     public static int 
         TRIGGER = 0;

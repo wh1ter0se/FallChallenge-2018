@@ -7,7 +7,13 @@
 
 package frc.robot.Subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.robot.Constants;
+import frc.robot.Util.JoystickController;
 
 /**
  * Add your docs here.
@@ -16,12 +22,14 @@ public class SubsystemShooter extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
-  public SubsystemShooter {
-    shooter = new TalonSRX(Constants.Shooter_ID);
+  TalonSRX shooter;
+
+  public SubsystemShooter() {
+    shooter = new TalonSRX(Constants.ShooterID);
   }
 
   public void shoot(Joystick joy) {
-    speed = Util.Joystick.SCALAR(joy);
+    double speed = JoystickController.SCALAR(joy);
     shooter.set(ControlMode.PercentOutput, speed);
   }
 

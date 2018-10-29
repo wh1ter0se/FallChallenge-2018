@@ -8,6 +8,8 @@
 package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.OI;
+import frc.robot.Robot;
 
 public class ButtonCommandShoot extends Command {
   public ButtonCommandShoot() {
@@ -23,7 +25,7 @@ public class ButtonCommandShoot extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.SUB_SHOOTER.shoot(OI.Driver);
+    Robot.SUB_SHOOTER.shoot(OI.DRIVER);
   }
 
   // Make this return true when this Command no longer needs to run execute()
