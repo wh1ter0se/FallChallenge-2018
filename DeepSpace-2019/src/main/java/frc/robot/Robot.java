@@ -7,12 +7,16 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Subsystems.SubsystemElevator;
 import frc.robot.Subsystems.SubsystemShooter;
 import frc.robot.Subsystems.SubsystemTurret;
+import frc.robot.Util.JoystickController;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -27,9 +31,13 @@ public class Robot extends IterativeRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
+  // Instantiate subsystems
   public static SubsystemElevator SUB_ELEVATOR;
   public static SubsystemShooter  SUB_SHOOTER;
   public static SubsystemTurret   SUB_TURRET;
+
+  // Instantiate OI
+  OI oi;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -37,6 +45,10 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void robotInit() {
+    DriverStation.reportWarning("ROBOT STARTED", false);
+    DriverStation.reportWarning("GOOD LUCK, HAVE FUN", false);
+    DriverStation.reportWarning("AIM FOR THE FRESHMAN", false);
+
     m_chooser.addDefault("Default Auto", kDefaultAuto);
     m_chooser.addObject("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
@@ -44,6 +56,12 @@ public class Robot extends IterativeRobot {
     SUB_ELEVATOR = new SubsystemElevator();
     SUB_SHOOTER  = new SubsystemShooter();
     SUB_TURRET   = new SubsystemTurret();
+
+    oi = new OI();
+
+    SmartDashboard.putData("Sub_Turret", SUB_TURRET);
+
+    DriverStation.reportWarning("SUBSYSTEMS, CHOOSERS INSTANTIATED", false);
   }
 
   /**
@@ -56,6 +74,9 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void robotPeriodic() {
+      // Button checker = new JoystickButton(OI.DRIVER, JoystickController.TRIGGER);
+      // DriverStation.reportWarning(checker.get() ? "true" : "false", false);
+      // remove this tester code once the shooter button is working
   }
 
   /**

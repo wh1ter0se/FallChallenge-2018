@@ -151,10 +151,10 @@ gradle-app.setting
 # gradle/wrapper/gradle-wrapper.properties
 
 # # VS Code Specific Java Settings
-.classpath
-.project
-.settings/
-bin/
+#.classpath
+#.project
+#.settings/
+#bin/
 
 
 # End of https://www.gitignore.io/api/c++,java,linux,macos,gradle,windows,visualstudiocode

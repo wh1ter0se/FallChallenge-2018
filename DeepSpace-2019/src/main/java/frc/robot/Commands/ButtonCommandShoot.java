@@ -7,24 +7,26 @@
 
 package frc.robot.Commands;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.OI;
 import frc.robot.Robot;
 
 public class ButtonCommandShoot extends Command {
   public ButtonCommandShoot() {
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
+    requires(Robot.SUB_SHOOTER);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    DriverStation.reportWarning("SHOOT INIT", false);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    DriverStation.reportWarning("SHOOTING", false);
     Robot.SUB_SHOOTER.shoot(OI.DRIVER);
   }
 
