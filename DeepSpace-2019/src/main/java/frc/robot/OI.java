@@ -11,7 +11,7 @@ public class OI {
     public static final Joystick OPERATOR = new Joystick(1);
     
     Button spinShooter = new JoystickButton(DRIVER, JoystickController.TRIGGER);
-        spinShooter.whileHeld(new ButtonCommandShoot());
+        //spinShooter.whileHeld(new ButtonCommandShoot());
 
 
 }
