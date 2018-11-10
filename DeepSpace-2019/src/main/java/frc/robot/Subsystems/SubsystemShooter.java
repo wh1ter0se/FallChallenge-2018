@@ -8,6 +8,7 @@
 package frc.robot.Subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -28,6 +29,7 @@ public class SubsystemShooter extends Subsystem {
   
   public SubsystemShooter() {
     shooter = new TalonSRX(Constants.ShooterID);
+      shooter.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
   }
 
   /**
@@ -46,6 +48,14 @@ public class SubsystemShooter extends Subsystem {
    */
   public void stopShooting() {
     shooter.set(ControlMode.PercentOutput, 0);
+  }
+
+  /**
+   * Gets the percent output of the flywheel motor
+   * @return percent output of the flywheel motor
+   */
+  public double getPercentOutput() {
+    return shooter.getMotorOutputPercent();
   }
 
 }

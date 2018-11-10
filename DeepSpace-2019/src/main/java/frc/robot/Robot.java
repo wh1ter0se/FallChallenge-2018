@@ -64,18 +64,23 @@ public class Robot extends IterativeRobot {
     
     m_chooser.addDefault("Default Auto", kDefaultAuto);
     m_chooser.addObject("My Auto", kCustomAuto);
-
     SmartDashboard.putData("Auto choices", m_chooser);
+
+    DriverStation.reportWarning("CHOOSERS INSTANTIATED", false);
 
     SUB_ELEVATOR = new SubsystemElevator();
     SUB_SHOOTER  = new SubsystemShooter();
     SUB_TURRET   = new SubsystemTurret();
 
+    SmartDashboard.putData("SUB_ELEVATOR", SUB_ELEVATOR);
+    SmartDashboard.putData("SUB_SHOOTER", SUB_SHOOTER);
+    SmartDashboard.putData("SUB_TURRET", SUB_TURRET);
+
+    DriverStation.reportWarning("SUBSYSTEMS INSTANTIATED", false);
+    
     oi = new OI();
 
-    SmartDashboard.putData("Sub_Turret", SUB_TURRET);
-
-    DriverStation.reportWarning("SUBSYSTEMS, CHOOSERS INSTANTIATED", false);
+    DriverStation.reportWarning("ROBOT INIT COMPLETE", false);
   }
 
   /**
@@ -88,6 +93,7 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void robotPeriodic() {
+    SmartDashboard.putNumber("Flywheel %", SUB_SHOOTER.getPercentOutput());
   }
 
   /**
