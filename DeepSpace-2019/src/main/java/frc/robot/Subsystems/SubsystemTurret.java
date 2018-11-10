@@ -17,7 +17,7 @@ import frc.robot.Commands.ManualCommandTurn;
 import frc.robot.Util.JoystickController;
 
 /**
- * Add your docs here.
+ * Controls the motor that rotates the shooter
  */
 public class SubsystemTurret extends Subsystem {
 
@@ -32,6 +32,12 @@ public class SubsystemTurret extends Subsystem {
     turret = new TalonSRX(Constants.TurretID);
   }
 
+  /**
+   * Sets the rotation speed equal to the X-axis value
+   * of the given joystick
+   * 
+   * @param joy The joystick that controls the rotation
+   */
   public void spin(Joystick joy) {
     turret.set(ControlMode.PercentOutput, JoystickController.X_AXIS(joy));
   }

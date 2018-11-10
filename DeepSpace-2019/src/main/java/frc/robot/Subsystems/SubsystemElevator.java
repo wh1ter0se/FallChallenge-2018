@@ -16,25 +16,33 @@ import frc.robot.Constants;
 import frc.robot.Util.JoystickController;
 
 /**
- * Add your docs here.
+ * Controls the motor that adjusts the shooter's pitch
  */
 public class SubsystemElevator extends Subsystem {
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
 
   public static TalonSRX elevator;
+
+  @Override
+  public void initDefaultCommand() {
+  }
 
   public SubsystemElevator() {
     elevator = new TalonSRX(Constants.ElevatorID);
   }
 
+  /**
+   * Sets the speed at which the elevator motor moves
+   * equal to the Y-axis value of the given joystick
+   *
+   * NOTE: Movement currently is relative, not absolute;
+   * the joystick controls the velocity at which the
+   * elevator motor moves, not the position it moves to      
+   * 
+   * @param joy The joystick that controls the pitch
+   */
   public void rise(Joystick joy) {
     elevator.set(ControlMode.PercentOutput, JoystickController.Y_AXIS(joy));
   }
   
-  @Override
-  public void initDefaultCommand() {
-    // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
-  }
+  
 }

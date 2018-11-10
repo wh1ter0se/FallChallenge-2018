@@ -16,30 +16,36 @@ import frc.robot.Constants;
 import frc.robot.Util.JoystickController;
 
 /**
- * Add your docs here.
+ * Controls the flywheel motor
  */
 public class SubsystemShooter extends Subsystem {
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
 
   TalonSRX shooter;
 
+  @Override
+  public void initDefaultCommand() {
+  }
+  
   public SubsystemShooter() {
     shooter = new TalonSRX(Constants.ShooterID);
   }
 
+  /**
+   * Sets the flywheel based on the axis value
+   * of the given joystick's scalar
+   * 
+   * @param joy The joystick that controls the flywheel speed
+   */
   public void shoot(Joystick joy) {
     double speed = JoystickController.SCALAR(joy);
     shooter.set(ControlMode.PercentOutput, speed);
   }
 
+  /**
+   * Sets the flywheel speed to zero
+   */
   public void stopShooting() {
     shooter.set(ControlMode.PercentOutput, 0);
   }
 
-  @Override
-  public void initDefaultCommand() {
-    // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
-  }
 }

@@ -9,11 +9,20 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Subsystems.SubsystemElevator;
 import frc.robot.Subsystems.SubsystemShooter;
 import frc.robot.Subsystems.SubsystemTurret;
+
+//        _____   _____   ____     ______
+//       |__  /  / ___/  / __ \   / ____/
+//        /_ <  / __ \  / /_/ /  /___ \
+//      ___/ / / /_/ /  \__, /  ____/ /
+//     /____/  \____/  /____/  /_____/
+//
+//     2018 (Fall Challenge) - [Unnamed Bot]
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -23,18 +32,24 @@ import frc.robot.Subsystems.SubsystemTurret;
  * project.
  */
 public class Robot extends IterativeRobot {
+
+  /**
+   * Instantiate the auto chooser and the string values
+   * that you'll use as objects when populating the chooser
+   */
+  private final SendableChooser<String> m_chooser = new SendableChooser<>();
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-  // Instantiate subsystems
+  /**
+   * Instantiate Subsystems
+   */
   public static SubsystemElevator SUB_ELEVATOR;
   public static SubsystemShooter  SUB_SHOOTER;
   public static SubsystemTurret   SUB_TURRET;
 
-  // Instantiate OI
-  OI oi;
+  public static OI oi;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -46,8 +61,10 @@ public class Robot extends IterativeRobot {
     DriverStation.reportWarning("GOOD LUCK, HAVE FUN", false);
     DriverStation.reportWarning("AIM FOR THE FRESHMAN", false);
 
+    
     m_chooser.addDefault("Default Auto", kDefaultAuto);
     m_chooser.addObject("My Auto", kCustomAuto);
+
     SmartDashboard.putData("Auto choices", m_chooser);
 
     SUB_ELEVATOR = new SubsystemElevator();
@@ -66,14 +83,11 @@ public class Robot extends IterativeRobot {
    * this for items like diagnostics that you want ran during disabled,
    * autonomous, teleoperated and test.
    *
-   * <p>This runs after the mode specific periodic functions, but before
+   * This runs after the mode specific periodic functions, but before
    * LiveWindow and SmartDashboard integrated updating.
    */
   @Override
   public void robotPeriodic() {
-      // Button checker = new JoystickButton(OI.DRIVER, JoystickController.TRIGGER);
-      // DriverStation.reportWarning(checker.get() ? "true" : "false", false);
-      // remove this tester code once the shooter button is working
   }
 
   /**
@@ -89,6 +103,7 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void autonomousInit() {
+    DriverStation.reportWarning("STARTING AUTONOMOUS", false);
     m_autoSelected = m_chooser.getSelected();
     // autoSelected = SmartDashboard.getString("Auto Selector",
     // defaultAuto);
@@ -111,11 +126,45 @@ public class Robot extends IterativeRobot {
     }
   }
 
+
+  /**
+   * This function is called once when the robot is disabled.
+   */
+  public void disabledInit() {
+    DriverStation.reportWarning("TELEOP IS DISABLED", false);
+    
+  }
+
+  /**
+   * This function is called periodically while the robot is disabled.
+   */
+  @Override
+  public void disabledPeriodic() {
+    Scheduler.getInstance().run();
+  }
+
+  /**
+   * This function is called once when the robot enters teleop mode.
+   */
+  public void teleopInit() {
+    DriverStation.reportWarning("TELEOP IS ENABLED", false);
+    
+  }
+
   /**
    * This function is called periodically during operator control.
    */
   @Override
   public void teleopPeriodic() {
+    Scheduler.getInstance().run();
+  }
+
+  /**
+   * This function is called when the robot enters test mode.
+   */
+  @Override
+  public void testInit() {
+    DriverStation.reportWarning("TEST MODE IS ENABLED", false);
   }
 
   /**
