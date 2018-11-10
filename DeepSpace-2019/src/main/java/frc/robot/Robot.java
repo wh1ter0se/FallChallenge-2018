@@ -9,14 +9,11 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.buttons.Button;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Subsystems.SubsystemElevator;
 import frc.robot.Subsystems.SubsystemShooter;
 import frc.robot.Subsystems.SubsystemTurret;
-import frc.robot.Util.JoystickController;
 
 /**
  * The VM is configured to automatically run this class, and to call the
