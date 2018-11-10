@@ -68,6 +68,7 @@ public class Robot extends IterativeRobot {
 
     DriverStation.reportWarning("CHOOSERS INSTANTIATED", false);
 
+
     SUB_ELEVATOR = new SubsystemElevator();
     SUB_SHOOTER  = new SubsystemShooter();
     SUB_TURRET   = new SubsystemTurret();
@@ -78,8 +79,10 @@ public class Robot extends IterativeRobot {
 
     DriverStation.reportWarning("SUBSYSTEMS INSTANTIATED", false);
     
+
     oi = new OI();
 
+    
     DriverStation.reportWarning("ROBOT INIT COMPLETE", false);
   }
 
@@ -93,7 +96,9 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void robotPeriodic() {
-    SmartDashboard.putNumber("Flywheel %", SUB_SHOOTER.getPercentOutput());
+    SUB_ELEVATOR.publishSwitches();
+
+    SmartDashboard.putNumber("Flywheel %", SUB_SHOOTER.getPercentOutput() * 100d);
   }
 
   /**

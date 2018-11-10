@@ -10,8 +10,10 @@ package frc.robot.Subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Util.JoystickController;
 
@@ -22,12 +24,18 @@ public class SubsystemElevator extends Subsystem {
 
   public static TalonSRX elevator;
 
+  DigitalInput lowerPitchLimit;
+  DigitalInput upperPitchLimit;
+
   @Override
   public void initDefaultCommand() {
   }
 
   public SubsystemElevator() {
     elevator = new TalonSRX(Constants.ElevatorID);
+
+    lowerPitchLimit = new DigitalInput(Constants.LowerPitchID);
+    upperPitchLimit = new DigitalInput(Constants.UpperPitchID);
   }
 
   /**
@@ -41,8 +49,21 @@ public class SubsystemElevator extends Subsystem {
    * @param joy The joystick that controls the pitch
    */
   public void rise(Joystick joy) {
-    elevator.set(ControlMode.PercentOutput, JoystickController.Y_AXIS(joy));
+    double speed = JoystickController.Y_AXIS(joy);
+
+    if (lowerPitchLimit.get() && speed < 0) { speed = 0; }
+    if (upperPitchLimit.get() && speed > 0) { speed = 0; }
+
+    elevator.set(ControlMode.PercentOutput, speed);
   }
   
+  /**
+   * Sends the boolean value of the limit switches to
+   * the SmartDashboard
+   */
+  public void publishSwitches() {
+    SmartDashboard.putBoolean("Lower Pitch", lowerPitchLimit.get());
+    SmartDashboard.putBoolean("Upper Pitch", upperPitchLimit.get());
+  }
   
 }
