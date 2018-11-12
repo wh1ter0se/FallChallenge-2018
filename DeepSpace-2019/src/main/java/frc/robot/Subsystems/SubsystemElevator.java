@@ -51,8 +51,12 @@ public class SubsystemElevator extends Subsystem {
   public void rise(Joystick joy) {
     double speed = JoystickController.Y_AXIS(joy);
 
-    if (lowerPitchLimit.get() && speed < 0) { speed = 0; }
-    if (upperPitchLimit.get() && speed > 0) { speed = 0; }
+    /**
+     * Limit switch inhibitor code
+     * Remove if unneccessary
+     */
+    // if (lowerPitchLimit.get() && speed < 0) { speed = 0; }
+    // if (upperPitchLimit.get() && speed > 0) { speed = 0; }
 
     elevator.set(ControlMode.PercentOutput, speed);
   }
