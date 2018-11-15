@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
+import frc.robot.Commands.ManualCommandRise;
 import frc.robot.Util.JoystickController;
 
 /**
@@ -29,13 +30,24 @@ public class SubsystemElevator extends Subsystem {
 
   @Override
   public void initDefaultCommand() {
+    setDefaultCommand(new ManualCommandRise());
   }
+
 
   public SubsystemElevator() {
     elevator = new TalonSRX(Constants.ElevatorID);
 
     lowerPitchLimit = new DigitalInput(Constants.LowerPitchID);
     upperPitchLimit = new DigitalInput(Constants.UpperPitchID);
+
+    setAllInverts();
+  }
+
+  /**
+   * Sets the motor inverts of the subsystem
+   */
+  private void setAllInverts() {
+    elevator.setInverted(true);
   }
 
   /**
@@ -48,8 +60,8 @@ public class SubsystemElevator extends Subsystem {
    * 
    * @param joy The joystick that controls the pitch
    */
-  public void rise(Joystick joy) {
-    double speed = JoystickController.Y_AXIS(joy);
+  public void rise(Joystick joy, double inhibitor) {
+    double speed = JoystickController.Y_AXIS(joy) * inhibitor;
 
     /**
      * Limit switch inhibitor code

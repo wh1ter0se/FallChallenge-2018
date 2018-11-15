@@ -34,8 +34,12 @@ public class JoystickController {
         return rawAxis;
     }    
 
+    private static double signedToUnsigned(double rawAxis) {
+        return (rawAxis + 1) / 2d;
+    }
+
     public static double X_AXIS(Joystick joy) {return deadzone(joy.getRawAxis(0));}
     public static double Y_AXIS(Joystick joy) {return deadzone(joy.getRawAxis(1));}
-    public static double SCALAR(Joystick joy) {return joy.getRawAxis(2);}
+    public static double SCALAR(Joystick joy) {return signedToUnsigned(joy.getRawAxis(2));}
         
 }

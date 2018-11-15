@@ -17,4 +17,10 @@ public class Constants {
         LowerPitchID = 0,
         UpperPitchID = 1;
 
+    /**
+     * Inhibitor Values
+     */
+    public static final double
+        ElevatorInhibitor = 0.2;
+
 }

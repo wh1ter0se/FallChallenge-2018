@@ -95,10 +95,12 @@ public class Robot extends IterativeRobot {
    * LiveWindow and SmartDashboard integrated updating.
    */
   @Override
+
   public void robotPeriodic() {
     SUB_ELEVATOR.publishSwitches();
 
     SmartDashboard.putNumber("Flywheel %", SUB_SHOOTER.getPercentOutput() * 100d);
+    SmartDashboard.putNumber("Flywheel RPM", SUB_SHOOTER.getFlywheelRPM());
   }
 
   /**
@@ -184,4 +186,5 @@ public class Robot extends IterativeRobot {
   @Override
   public void testPeriodic() {
   }
+
 }

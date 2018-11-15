@@ -38,7 +38,7 @@ public class SubsystemShooter extends Subsystem {
    * 
    * @param joy The joystick that controls the flywheel speed
    */
-  public void shoot(Joystick joy) {
+  public void shootByPercent(Joystick joy) {
     double speed = JoystickController.SCALAR(joy);
     shooter.set(ControlMode.PercentOutput, speed);
   }
@@ -56,6 +56,14 @@ public class SubsystemShooter extends Subsystem {
    */
   public double getPercentOutput() {
     return shooter.getMotorOutputPercent();
+  }
+
+   /**
+   * Returns the RPM of the flywheel
+   * @return flywheel RPM
+   */
+  public int getFlywheelRPM() {
+    return (int) (shooter.getSelectedSensorVelocity(0) / (2 * Math.PI));
   }
 
 }

@@ -27,7 +27,7 @@ public class ButtonCommandShoot extends Command {
   @Override
   protected void execute() {
     DriverStation.reportWarning("SHOOTING", false);
-    Robot.SUB_SHOOTER.shoot(OI.DRIVER);
+    Robot.SUB_SHOOTER.shootByPercent(OI.DRIVER);
   }
 
   // Make this return true when this Command no longer needs to run execute()

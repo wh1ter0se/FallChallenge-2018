@@ -28,7 +28,7 @@ public class OI {
          * Spins the flywheel if the trigger while the trigger is held
          */
         Button spinShooter = new JoystickButton(DRIVER, JoystickController.TRIGGER);
-            spinShooter.whileHeld(new ButtonCommandShoot());
+            spinShooter.toggleWhenPressed(new ButtonCommandShoot());
 
             
         DriverStation.reportWarning("OI INSTANTIATED", false);
