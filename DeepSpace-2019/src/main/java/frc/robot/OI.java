@@ -1,11 +1,13 @@
 package frc.robot;
 
 import frc.robot.Commands.ButtonCommandShoot;
+import frc.robot.Commands.CyborgCommandCalibrateElevator;
 import frc.robot.Util.JoystickController;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Sets all controls beside ManualCommands (which
@@ -30,7 +32,11 @@ public class OI {
         Button spinShooter = new JoystickButton(DRIVER, JoystickController.TRIGGER);
             spinShooter.toggleWhenPressed(new ButtonCommandShoot());
 
-            
+        /**
+         * Lowers the elevator to the mechanical limit and zeroes the encoder
+         */
+        SmartDashboard.putData("Zero Elevator", new CyborgCommandCalibrateElevator());
+
         DriverStation.reportWarning("OI INSTANTIATED", false);
     }
 

@@ -10,7 +10,6 @@ package frc.robot.Subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,9 +24,6 @@ public class SubsystemElevator extends Subsystem {
 
   public static TalonSRX elevator;
 
-  DigitalInput lowerPitchLimit;
-  DigitalInput upperPitchLimit;
-
   @Override
   public void initDefaultCommand() {
     setDefaultCommand(new ManualCommandRise());
@@ -36,9 +32,6 @@ public class SubsystemElevator extends Subsystem {
 
   public SubsystemElevator() {
     elevator = new TalonSRX(Constants.ElevatorID);
-
-    lowerPitchLimit = new DigitalInput(Constants.LowerPitchID);
-    upperPitchLimit = new DigitalInput(Constants.UpperPitchID);
 
     setAllInverts();
   }
@@ -62,15 +55,27 @@ public class SubsystemElevator extends Subsystem {
    */
   public void rise(Joystick joy, double inhibitor) {
     double speed = JoystickController.Y_AXIS(joy) * inhibitor;
-
-    /**
-     * Limit switch inhibitor code
-     * Remove if unneccessary
-     */
-    // if (lowerPitchLimit.get() && speed < 0) { speed = 0; }
-    // if (upperPitchLimit.get() && speed > 0) { speed = 0; }
-
     elevator.set(ControlMode.PercentOutput, speed);
+  }
+
+  /**
+   * Lowers the elevator at maximum speed with complete disregard.
+   * The limit switch mechanically stops it, so this method doesn't
+   * need to. The command calling this method should stop when
+   * this method returns true.
+   * 
+   * @return the state of the lower limit switch
+   */
+  public Boolean lowerUntilSwitch() {
+    elevator.set(ControlMode.PercentOutput, -.1);
+    return elevator.getSensorCollection().isFwdLimitSwitchClosed();
+  }
+
+  /**
+   * Sets the elevator encoder value to zero
+   */
+  public void zeroEncoder() {
+    elevator.getSensorCollection().setQuadraturePosition(0, 5000);
   }
   
   /**
@@ -78,8 +83,8 @@ public class SubsystemElevator extends Subsystem {
    * the SmartDashboard
    */
   public void publishSwitches() {
-    SmartDashboard.putBoolean("Lower Pitch", lowerPitchLimit.get());
-    SmartDashboard.putBoolean("Upper Pitch", upperPitchLimit.get());
+    SmartDashboard.putBoolean("Lower Pitch", elevator.getSensorCollection().isFwdLimitSwitchClosed());
+    SmartDashboard.putBoolean("Upper Pitch", elevator.getSensorCollection().isRevLimitSwitchClosed());
   }
   
 }
