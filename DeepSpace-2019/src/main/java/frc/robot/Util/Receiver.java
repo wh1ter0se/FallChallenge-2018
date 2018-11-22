@@ -45,7 +45,7 @@ public class Receiver
       String segment = new String(receivePacket.getData()); //create string with data to output
 
       // output the segment
-      if (segment != "") { latestSegment = segment; } //might need fixing: does no sent data read null or ""?
+      if (segment != "") { latestSegment = segment; } //TODO fix if needed: does no sent data read null or ""?
       System.out.println("THE PI SAYS:" + segment); 
    }
 
