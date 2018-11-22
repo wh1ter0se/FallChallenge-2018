@@ -10,6 +10,10 @@ package frc.robot.Commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
+/**
+ * Zeroes the elevator's encoder by lowering it until
+ * it hits the switch and then resetting the encoder
+ */
 public class CyborgCommandCalibrateElevator extends Command {
 
   private static Boolean isFinished;

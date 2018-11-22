@@ -7,16 +7,14 @@
 
 package frc.robot.Commands;
 
+import java.io.IOException;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.Robot;
 
-/**
- * Rotates the turret and adjusts the elevator to put the target
- * with a pixel tolerance of the center-most pixel coordinate
- */
-public class CyborgCommandMoveToTarget extends Command {
-
-  
-  public CyborgCommandMoveToTarget() {
+public class PeriodicCommandListen extends Command {
+  public PeriodicCommandListen() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }
@@ -29,6 +27,11 @@ public class CyborgCommandMoveToTarget extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    try {
+      Robot.SUB_RECEIVER.retrievePiData();
+    } catch (IOException e) {
+      DriverStation.reportWarning("IO EXCEPTION", false);
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()

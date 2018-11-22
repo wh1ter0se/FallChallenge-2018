@@ -9,14 +9,8 @@ package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-/**
- * Rotates the turret and adjusts the elevator to put the target
- * with a pixel tolerance of the center-most pixel coordinate
- */
-public class CyborgCommandMoveToTarget extends Command {
-
-  
-  public CyborgCommandMoveToTarget() {
+public class CyborgCommandFindTarget extends Command {
+  public CyborgCommandFindTarget() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }

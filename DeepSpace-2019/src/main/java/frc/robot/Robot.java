@@ -16,9 +16,9 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Subsystems.SubsystemElevator;
+import frc.robot.Subsystems.SubsystemReceiver;
 import frc.robot.Subsystems.SubsystemShooter;
 import frc.robot.Subsystems.SubsystemTurret;
-import frc.robot.Util.Receiver;
 
 //        _____   _____   ____     ______
 //       |__  /  / ___/  / __ \   / ____/
@@ -50,6 +50,7 @@ public class Robot extends IterativeRobot {
    * Instantiate Subsystems
    */
   public static SubsystemElevator SUB_ELEVATOR;
+  public static SubsystemReceiver SUB_RECEIVER;
   public static SubsystemShooter  SUB_SHOOTER;
   public static SubsystemTurret   SUB_TURRET;
 
@@ -74,10 +75,12 @@ public class Robot extends IterativeRobot {
 
 
     SUB_ELEVATOR = new SubsystemElevator();
+    SUB_RECEIVER = new SubsystemReceiver();
     SUB_SHOOTER  = new SubsystemShooter();
     SUB_TURRET   = new SubsystemTurret();
 
     SmartDashboard.putData("SUB_ELEVATOR", SUB_ELEVATOR);
+    SmartDashboard.putData("SUB_RECEIVER", SUB_RECEIVER);
     SmartDashboard.putData("SUB_SHOOTER", SUB_SHOOTER);
     SmartDashboard.putData("SUB_TURRET", SUB_TURRET);
 
@@ -99,20 +102,11 @@ public class Robot extends IterativeRobot {
    * LiveWindow and SmartDashboard integrated updating.
    */
   @Override
-
   public void robotPeriodic() {
     SUB_ELEVATOR.publishSwitches();
 
     SmartDashboard.putNumber("Flywheel %", SUB_SHOOTER.getPercentOutput() * 100d);
     SmartDashboard.putNumber("Flywheel RPM", SUB_SHOOTER.getFlywheelRPM());
-
-    try {
-      Receiver.retrievePiData();
-    } catch (SocketException e) {
-      DriverStation.reportWarning("SOCKET EXCEPTION", false);
-    } catch (IOException e) {
-      DriverStation.reportWarning("IO EXCEPTION", false);
-    }
   }
 
   /**
