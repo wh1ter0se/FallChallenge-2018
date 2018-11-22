@@ -10,7 +10,7 @@ public class Constants {
         CameraWidth  = 1920; //TODO verify these
     
     /**
-     * Inhibitor Values
+     * Inhibitor Backup Values
      */
     public static final double
         ElevatorInhibitor = 0.6;
