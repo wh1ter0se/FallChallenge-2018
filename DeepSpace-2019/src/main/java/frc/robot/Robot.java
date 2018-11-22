@@ -7,6 +7,9 @@
 
 package frc.robot;
 
+import java.io.IOException;
+import java.net.SocketException;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -15,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Subsystems.SubsystemElevator;
 import frc.robot.Subsystems.SubsystemShooter;
 import frc.robot.Subsystems.SubsystemTurret;
+import frc.robot.Util.Receiver;
 
 //        _____   _____   ____     ______
 //       |__  /  / ___/  / __ \   / ____/
@@ -101,6 +105,14 @@ public class Robot extends IterativeRobot {
 
     SmartDashboard.putNumber("Flywheel %", SUB_SHOOTER.getPercentOutput() * 100d);
     SmartDashboard.putNumber("Flywheel RPM", SUB_SHOOTER.getFlywheelRPM());
+
+    try {
+      Receiver.retrievePiData();
+    } catch (SocketException e) {
+      DriverStation.reportWarning("SOCKET EXCEPTION", false);
+    } catch (IOException e) {
+      DriverStation.reportWarning("IO EXCEPTION", false);
+    }
   }
 
   /**
