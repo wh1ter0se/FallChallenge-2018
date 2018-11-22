@@ -20,13 +20,12 @@ public class ButtonCommandShoot extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    DriverStation.reportWarning("SHOOT INIT", false);
+    DriverStation.reportWarning("FIRING", false);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    DriverStation.reportWarning("SHOOTING", false);
     Robot.SUB_SHOOTER.shootByPercent(OI.DRIVER);
   }
 

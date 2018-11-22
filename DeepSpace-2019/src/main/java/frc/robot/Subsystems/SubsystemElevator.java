@@ -53,9 +53,26 @@ public class SubsystemElevator extends Subsystem {
    * 
    * @param joy The joystick that controls the pitch
    */
-  public void rise(Joystick joy, double inhibitor) {
+  public void riseByJoystick(Joystick joy, double inhibitor) {
     double speed = JoystickController.Y_AXIS(joy) * inhibitor;
     elevator.set(ControlMode.PercentOutput, speed);
+  }
+
+  /**
+   * Sets the speed at which the elevator 
+   * moves equal to a given double
+   * 
+   * @param percent the percent output sent to the talon
+   */
+  public void riseByPercentOutput(double percent) {
+    elevator.set(ControlMode.PercentOutput, percent);
+  }
+
+  /**
+   * Sets the rise speed to 0
+   */
+  public void stopRising() {
+    elevator.set(ControlMode.PercentOutput, 0);
   }
 
   /**
@@ -76,6 +93,22 @@ public class SubsystemElevator extends Subsystem {
    */
   public void zeroEncoder() {
     elevator.getSensorCollection().setQuadraturePosition(0, 5000);
+  }
+
+  /**
+   * Retrieves the state of the lower limit switch
+   * @return the state of the lower limit switch
+   */
+  public Boolean getLowerSwitch() {
+    return elevator.getSensorCollection().isFwdLimitSwitchClosed();
+  }
+
+  /**
+   * Retrieves the state of the upper limit switch
+   * @return the state of the upper limit switch
+   */
+  public Boolean getUpperSwitch() {
+    return elevator.getSensorCollection().isRevLimitSwitchClosed();
   }
   
   /**

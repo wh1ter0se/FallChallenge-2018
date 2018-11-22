@@ -61,7 +61,7 @@ public class SubsystemReceiver extends Subsystem {
    * Retrieves the last known pixel coordinates of the target
    * @return -1,-1 for no known location, or an int[] with the last coordinates
    */
-  public static int[] getLastKnownLocation() {
+  public int[] getLastKnownLocation() {
       int[] coord = new int[2];
       
       coord[0] = Integer.parseInt(latestSegment.substring(0, latestSegment.indexOf(",")));

@@ -35,12 +35,25 @@ public class SubsystemTurret extends Subsystem {
   /**
    * Sets the rotation speed equal to the X-axis value
    * of the given joystick
-   * 
    * @param joy The joystick that controls the rotation
    */
-  public void spin(Joystick joy) {
+  public void spinByJoystick(Joystick joy) {
     turret.set(ControlMode.PercentOutput, JoystickController.X_AXIS(joy));
   }
 
+  /**
+   * Sets the rotational speed equal to a given double
+   * @param percent the percent output sent to the talon
+   */
+  public void spinByPercentOutput(double percent) {
+    turret.set(ControlMode.PercentOutput, percent);
+  }
+
+  /**
+   * Sets the spin speed to 0
+   */
+  public void stopSpinning() {
+    turret.set(ControlMode.PercentOutput, 0);
+  }
   
 }

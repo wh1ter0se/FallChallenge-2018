@@ -26,7 +26,7 @@ public class ManualCommandRise extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.SUB_ELEVATOR.rise(OI.DRIVER, Util.getAndSetDouble("Elevator Inhibitor", Constants.ElevatorInhibitor));
+    Robot.SUB_ELEVATOR.riseByJoystick(OI.DRIVER, Util.getAndSetDouble("Elevator Inhibitor", Constants.ElevatorInhibitor));
   }
 
   // Make this return true when this Command no longer needs to run execute()

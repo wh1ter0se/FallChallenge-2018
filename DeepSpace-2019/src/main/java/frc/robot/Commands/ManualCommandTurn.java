@@ -27,7 +27,7 @@ public class ManualCommandTurn extends Command {
   @Override
   protected void execute() {
     DriverStation.reportWarning("TURN EXECUTE", false);
-    Robot.SUB_TURRET.spin(OI.DRIVER);
+    Robot.SUB_TURRET.spinByJoystick(OI.DRIVER);
   }
 
   // Make this return true when this Command no longer needs to run execute()

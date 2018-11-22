@@ -23,6 +23,13 @@ public class Constants {
         UpperPitchID = 1;
 
     /**
+     * Scanner Speed Backup Values
+     */
+    public static final double
+        ElevatorScanSpeed = 0.6,
+        TurretScanSpeed   = 0.5;
+
+    /**
      * Talon IDs
      */
     public static final int 

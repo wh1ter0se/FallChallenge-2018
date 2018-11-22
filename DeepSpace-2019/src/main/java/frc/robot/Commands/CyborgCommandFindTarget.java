@@ -7,33 +7,67 @@
 
 package frc.robot.Commands;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.Constants;
+import frc.robot.Robot;
+import frc.robot.Util.Util;
 
 public class CyborgCommandFindTarget extends Command {
+
   public CyborgCommandFindTarget() {
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
+    requires(Robot.SUB_TURRET);
+    requires(Robot.SUB_ELEVATOR);
   }
+
+  private Boolean rising;
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    DriverStation.reportWarning("FINDING TARGET", false);
+
+    rising = true;
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    /**
+     * Rotates the turret at a constant percent output
+     */
+    Robot.SUB_TURRET.spinByPercentOutput(Util.getAndSetDouble("Turret Scan Speed", Constants.TurretScanSpeed));
+    
+    /**
+     * Makes the elevator go up and down
+     */
+    double elevatorScanSpeed = Math.abs(Util.getAndSetDouble("Elevator Scan Speed", Constants.ElevatorScanSpeed));
+    if (rising && !Robot.SUB_ELEVATOR.getUpperSwitch()) {
+      // move up if rising and not at the top
+      Robot.SUB_ELEVATOR.riseByPercentOutput(elevatorScanSpeed);
+    } else if (!rising && Robot.SUB_ELEVATOR.getLowerSwitch()) {
+      // move up and set rising true if not rising but at the bottom
+      Robot.SUB_ELEVATOR.riseByPercentOutput(elevatorScanSpeed);
+    } else {
+      // move down and set rising false if rising but at the top
+      Robot.SUB_ELEVATOR.riseByPercentOutput(-1 * elevatorScanSpeed);
+    }
+
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return (Robot.SUB_RECEIVER.getLastKnownLocation() != new int[]{-1, -1});
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    Robot.SUB_ELEVATOR.stopRising();
+    Robot.SUB_TURRET.stopSpinning();
+
+    DriverStation.reportWarning("ENEMY SPOTTED", false); //I couldn't help myself
   }
 
   // Called when another command which requires one or more of the same
