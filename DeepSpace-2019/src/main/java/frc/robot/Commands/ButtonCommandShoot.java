@@ -26,7 +26,7 @@ public class ButtonCommandShoot extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.SUB_SHOOTER.shootByPercent(OI.DRIVER);
+    Robot.SUB_SHOOTER.shootByJoystick(OI.DRIVER);
   }
 
   // Make this return true when this Command no longer needs to run execute()

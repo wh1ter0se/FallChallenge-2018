@@ -39,7 +39,7 @@ public class CyborgCommandFindTarget extends Command {
     Robot.SUB_TURRET.spinByPercentOutput(Util.getAndSetDouble("Turret Scan Speed", Constants.TurretScanSpeed));
     
     /**
-     * Makes the elevator go up and down
+     * Makes the elevator go up and down repeatedly
      */
     double elevatorScanSpeed = Math.abs(Util.getAndSetDouble("Elevator Scan Speed", Constants.ElevatorScanSpeed));
     if (rising && !Robot.SUB_ELEVATOR.getUpperSwitch()) {
