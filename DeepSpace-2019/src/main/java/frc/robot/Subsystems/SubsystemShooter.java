@@ -33,14 +33,21 @@ public class SubsystemShooter extends Subsystem {
   }
 
   /**
-   * Sets the flywheel based on the axis value
-   * of the given joystick's scalar
-   * 
+   * Sets the shooter's percent output based on the 
+   * axis value of the given joystick's scalar
    * @param joy The joystick that controls the flywheel speed
    */
-  public void shootByPercent(Joystick joy) {
+  public void shootByJoystick(Joystick joy) {
     double speed = JoystickController.SCALAR(joy);
     shooter.set(ControlMode.PercentOutput, speed);
+  }
+
+  /**
+   * Sets the shooter's percent ouput to a given double
+   * @param percent the percent output of the shooter motor
+   */
+  public void shootByPercent(double percent) {
+    shooter.set(ControlMode.PercentOutput, percent);
   }
 
   /**

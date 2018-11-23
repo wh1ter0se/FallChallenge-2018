@@ -16,8 +16,8 @@ import frc.robot.Util.Util;
 public class CyborgCommandFindTarget extends Command {
 
   public CyborgCommandFindTarget() {
-    requires(Robot.SUB_TURRET);
     requires(Robot.SUB_ELEVATOR);
+    requires(Robot.SUB_TURRET);
   }
 
   private Boolean rising;

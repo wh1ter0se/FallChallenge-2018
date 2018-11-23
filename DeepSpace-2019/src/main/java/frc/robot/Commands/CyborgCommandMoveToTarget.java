@@ -7,7 +7,13 @@
 
 package frc.robot.Commands;
 
+import org.omg.SendingContext.RunTimeOperations;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.Constants;
+import frc.robot.Robot;
+import frc.robot.Util.Util;
 
 /**
  * Rotates the turret and adjusts the elevator to put the target
@@ -15,31 +21,74 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class CyborgCommandMoveToTarget extends Command {
 
-  
+  private static Boolean isFinished;
+
+  private static int[] centerpoint;
+  private static int[] target;
+
+  private static double horizontalTicksPerPixel;
+  private static double verticalTicksPerPixel;
+
+  private static int horizontalTicksAway;
+  private static int verticalTicksAway;
+
   public CyborgCommandMoveToTarget() {
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
+    requires(Robot.SUB_ELEVATOR);
+    requires(Robot.SUB_TURRET);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    DriverStation.reportWarning("ENGAGING TARGET", false);
+
+    isFinished = false;
+
+    centerpoint = new int[]{Constants.CameraWidth / 2, Constants.CameraHeight / 2};
+    target = Robot.SUB_RECEIVER.getLastKnownLocation();
+
+    //pixelsPerTick = pixelsPerRotation / ticksPerRotation
+    horizontalTicksPerPixel = ((360 / Constants.HorizontalFOV) * Constants.CameraWidth) / Constants.EncoderTicksPerRotation;
+    verticalTicksPerPixel = ((360 / Constants.VerticalFOV) * Constants.CameraHeight) / Constants.EncoderTicksPerRotation;
+
+    horizontalTicksAway = (int) ((centerpoint[0] - target[0]) * horizontalTicksPerPixel);
+    verticalTicksAway = (int) ((centerpoint[0] - target[0]) * verticalTicksPerPixel);
+
+    Robot.SUB_ELEVATOR.setPIDF(
+      Util.getAndSetDouble("Elevator Position kP", Constants.elevatorPositionP),
+      Util.getAndSetDouble("Elevator Position kI", Constants.elevatorPositionI),
+      Util.getAndSetDouble("Elevator Position kD", Constants.elevatorPositionD),
+      Util.getAndSetDouble("Elevator Position kF", Constants.elevatorPositionF));
+    Robot.SUB_TURRET.setPIDF(
+      Util.getAndSetDouble("Turret Position kP", Constants.turretPositionP),
+      Util.getAndSetDouble("Turret Position kI", Constants.turretPositionI),
+      Util.getAndSetDouble("Turret Position kD", Constants.turretPositionD),
+      Util.getAndSetDouble("Turret Position kF", Constants.turretPositionF));
+
+    Robot.SUB_ELEVATOR.riseByPosition(verticalTicksAway);
+    Robot.SUB_TURRET.spinByPosition(horizontalTicksAway);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    DriverStation.reportWarning("Elevator Error: " + Robot.SUB_ELEVATOR.getClosedLoopError(), false);
+    DriverStation.reportWarning("Turret Error: " + Robot.SUB_TURRET.getClosedLoopError(), false);
+
+    isFinished = Robot.SUB_ELEVATOR.getClosedLoopError() < Constants.allowablePositionError &&
+                 Robot.SUB_TURRET.getClosedLoopError() < Constants.allowablePositionError;
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return isFinished;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    DriverStation.reportWarning("TARGET ENGAGED", false);
   }
 
   // Called when another command which requires one or more of the same

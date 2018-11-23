@@ -50,10 +50,36 @@ public class SubsystemTurret extends Subsystem {
   }
 
   /**
+   * Sets the Talon control mode to position and sets
+   * the value equal to the given position
+   * @param encoderTicks the desired position (signed) in encoder ticks
+   */
+  public void spinByPosition(int encoderTicks) {
+    turret.set(ControlMode.Position, encoderTicks);
+  }
+
+  /**
    * Sets the spin speed to 0
    */
   public void stopSpinning() {
     turret.set(ControlMode.PercentOutput, 0);
+  }
+
+  /**
+   * Sets the turret talon's PIDF values
+   */
+  public void setPIDF(double P, double I, double D, double F) {
+    turret.config_kF(Constants.PIDLoopID, P, Constants.timeoutMs);
+		turret.config_kP(Constants.PIDLoopID, I, Constants.timeoutMs);
+		turret.config_kI(Constants.PIDLoopID, D, Constants.timeoutMs);
+		turret.config_kD(Constants.PIDLoopID, F, Constants.timeoutMs);
+  }
+
+  /**
+   * Receives the units away the talon is from its target
+   */
+  public int getClosedLoopError() {
+    return turret.getClosedLoopError(Constants.PIDLoopID);
   }
   
 }

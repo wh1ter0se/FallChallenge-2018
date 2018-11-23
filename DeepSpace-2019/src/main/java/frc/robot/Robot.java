@@ -7,9 +7,6 @@
 
 package frc.robot;
 
-import java.io.IOException;
-import java.net.SocketException;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
