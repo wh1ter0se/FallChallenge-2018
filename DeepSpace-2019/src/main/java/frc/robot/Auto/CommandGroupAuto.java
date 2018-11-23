@@ -8,27 +8,26 @@
 package frc.robot.Auto;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import frc.robot.Commands.CyborgCommandFindTarget;
+import frc.robot.Commands.CyborgCommandMoveToTarget;
+import frc.robot.Commands.CyborgCommandShootByTime;
+import frc.robot.Enumeration.Auto;
 
+/**
+ * Controls the autonomous seqences
+ */
 public class CommandGroupAuto extends CommandGroup {
-  /**
-   * Add your docs here.
-   */
-  public CommandGroupAuto() {
-    // Add Commands here:
-    // e.g. addSequential(new Command1());
-    // addSequential(new Command2());
-    // these will run in order.
+  public CommandGroupAuto(Auto selectedAuto) {
 
-    // To run multiple commands at the same time,
-    // use addParallel()
-    // e.g. addParallel(new Command1());
-    // addSequential(new Command2());
-    // Command1 and Command2 will run in parallel.
+    switch (selectedAuto) {
+      case NOTHING:
 
-    // A command group will require all of the subsystems that each member
-    // would require.
-    // e.g. if Command1 requires chassis, and Command2 requires arm,
-    // a CommandGroup containing them would require both the chassis and the
-    // arm.
+        break;
+      case SEARCH_AND_DESTROY:
+        addSequential(new CyborgCommandFindTarget());
+        addSequential(new CyborgCommandMoveToTarget());
+        addSequential(new CyborgCommandShootByTime(7500));
+        break;
+    }
   }
 }
