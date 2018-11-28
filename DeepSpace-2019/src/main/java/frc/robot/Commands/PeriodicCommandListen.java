@@ -15,8 +15,7 @@ import frc.robot.Robot;
 
 public class PeriodicCommandListen extends Command {
   public PeriodicCommandListen() {
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
+    requires(Robot.SUB_RECEIVER);
   }
 
   // Called just before this Command runs the first time
@@ -27,11 +26,11 @@ public class PeriodicCommandListen extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    try {
-      Robot.SUB_RECEIVER.retrievePiData();
-    } catch (IOException e) {
-      DriverStation.reportWarning("IO EXCEPTION", false);
-    }
+    // try {
+    //   Robot.SUB_RECEIVER.retrievePiData();
+    // } catch (IOException e) {
+    //   DriverStation.reportWarning("IO EXCEPTION", false);
+    // }
   }
 
   // Make this return true when this Command no longer needs to run execute()

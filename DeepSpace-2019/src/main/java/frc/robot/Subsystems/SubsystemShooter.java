@@ -73,4 +73,12 @@ public class SubsystemShooter extends Subsystem {
     return (int) (shooter.getSelectedSensorVelocity(0) / (2 * Math.PI));
   }
 
+  /**
+   * Returns whether or not the flywheel talon is diabled
+   * @return flywheel talon IS in control mode other than Disabled
+   */
+  public Boolean getFiring() {
+    return shooter.getControlMode() != ControlMode.Disabled;
+  }
+
 }

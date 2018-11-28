@@ -108,6 +108,7 @@ public class Robot extends IterativeRobot {
   public void robotPeriodic() {
     SUB_ELEVATOR.publishSwitches();
 
+    SmartDashboard.putBoolean("Firing", SUB_SHOOTER.getFiring());
     SmartDashboard.putNumber("Flywheel %", SUB_SHOOTER.getPercentOutput() * 100d);
     SmartDashboard.putNumber("Flywheel RPM", SUB_SHOOTER.getFlywheelRPM());
   }
