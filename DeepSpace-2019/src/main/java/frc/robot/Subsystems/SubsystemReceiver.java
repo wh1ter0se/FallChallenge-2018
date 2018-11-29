@@ -64,8 +64,14 @@ public class SubsystemReceiver extends Subsystem {
   public int[] getLastKnownLocation() {
       int[] coord = new int[2];
       
+      try {
       coord[0] = Integer.parseInt(latestSegment.substring(0, latestSegment.indexOf(",")));
       coord[1] = Integer.parseInt(latestSegment.substring(latestSegment.indexOf(",")));
+      } catch (NumberFormatException e) {
+        System.out.println("NUMBER FORMAT EXCEPTION"); 
+        System.out.println("coord[0] = " + coord[0]); 
+        System.out.println("coord[1] = " + coord[1]); 
+      }
 
       return coord;
   }
