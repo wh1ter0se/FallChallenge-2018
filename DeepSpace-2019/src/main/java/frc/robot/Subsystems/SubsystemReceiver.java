@@ -14,7 +14,6 @@ import java.net.SocketException;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.robot.Commands.PeriodicCommandListen;
 
 /**
  * The receiver code that runs on the Rio to listen for UDP data
@@ -28,7 +27,6 @@ public class SubsystemReceiver extends Subsystem {
 
   @Override
   public void initDefaultCommand() {
-    setDefaultCommand(new PeriodicCommandListen());
   }
 
   public SubsystemReceiver() {
@@ -37,24 +35,26 @@ public class SubsystemReceiver extends Subsystem {
     try {
       serverSocket = new DatagramSocket(3695);
       receiveData  = new byte[1024];
-    } catch (SocketException e) { // thrown when a socket cannot be created
+    } catch (SocketException e) { //thrown when a socket cannot be created
       DriverStation.reportWarning("SOCKET EXCEPTION", false);
     }
-  }
 
-  /**
-   * Called iteratively to read data sent to the Rio from
-   * the pi through UDP over the ethernet
-   * @throws IOException thrown when the socket cannot receive the packet
-   */
-  public void retrievePiData() throws IOException {
-    DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length); //create a new packet for the receiving data 
-    serverSocket.receive(receivePacket); //receive the packet from the Socket
-    String segment = new String(receivePacket.getData()); //create string with data to output
+    Thread listener = new Thread(() -> {
+      while(!Thread.interrupted()) {
+        try {
+          DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length); //create a new packet for the receiving data 
+          serverSocket.receive(receivePacket); //receive the packet from the Socket
+          String segment = new String(receivePacket.getData()); //create string with data to output
+          latestSegment = segment;
+          System.out.println("THE PI SAYS:" + segment); 
+        } catch (IOException e) { //thrown when the socket cannot receive the packet
+          DriverStation.reportWarning("IO EXCEPTION", false);
+        }
+      }
+    });
+    
+    listener.start();
 
-    // output the segment
-    if (segment != "") { latestSegment = segment; } //TODO fix if needed: does no sent data read null or ""?
-    System.out.println("THE PI SAYS:" + segment); 
   }
 
   /**
