@@ -109,7 +109,7 @@ public class SubsystemElevator extends Subsystem {
    * @return the state of the lower limit switch
    */
   public Boolean getLowerSwitch() {
-    return elevator.getSensorCollection().isFwdLimitSwitchClosed();
+    return elevator.getSensorCollection().isRevLimitSwitchClosed();
   }
 
   /**
@@ -117,7 +117,7 @@ public class SubsystemElevator extends Subsystem {
    * @return the state of the upper limit switch
    */
   public Boolean getUpperSwitch() {
-    return elevator.getSensorCollection().isRevLimitSwitchClosed();
+    return elevator.getSensorCollection().isFwdLimitSwitchClosed();
   }
   
   /**
@@ -125,8 +125,8 @@ public class SubsystemElevator extends Subsystem {
    * the SmartDashboard
    */
   public void publishSwitches() {
-    SmartDashboard.putBoolean("Lower Pitch", elevator.getSensorCollection().isFwdLimitSwitchClosed());
-    SmartDashboard.putBoolean("Upper Pitch", elevator.getSensorCollection().isRevLimitSwitchClosed());
+    SmartDashboard.putBoolean("Lower Pitch", elevator.getSensorCollection().isRevLimitSwitchClosed());
+    SmartDashboard.putBoolean("Upper Pitch", elevator.getSensorCollection().isFwdLimitSwitchClosed());
   }
 
   /**

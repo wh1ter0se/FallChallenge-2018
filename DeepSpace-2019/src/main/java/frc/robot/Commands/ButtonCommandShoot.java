@@ -20,6 +20,7 @@ public class ButtonCommandShoot extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    Robot.SUB_SHOOTER.setFiring(true);
     DriverStation.reportWarning("FIRING", false);
   }
 
@@ -38,6 +39,7 @@ public class ButtonCommandShoot extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    Robot.SUB_SHOOTER.setFiring(false);
     Robot.SUB_SHOOTER.stopShooting();
   }
 

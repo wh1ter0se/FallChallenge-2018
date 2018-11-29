@@ -42,15 +42,17 @@ public class CyborgCommandFindTarget extends Command {
      * Makes the elevator go up and down repeatedly
      */
     double elevatorScanSpeed = Math.abs(Util.getAndSetDouble("Elevator Scan Speed", Constants.ElevatorScanSpeed));
-    if (rising && !Robot.SUB_ELEVATOR.getUpperSwitch()) {
+    if (rising && !Robot.SUB_ELEVATOR.getUpperSwitch()) { //SWITCH BACK WHEN THE LIMIT SWITCHES ARE RIGHT
       // move up if rising and not at the top
       Robot.SUB_ELEVATOR.riseByPercentOutput(elevatorScanSpeed);
-    } else if (!rising && Robot.SUB_ELEVATOR.getLowerSwitch()) {
+    } else if (!rising && Robot.SUB_ELEVATOR.getLowerSwitch()) { //SWITCH BACK WHEN THE LIMIT SWITCHES ARE RIGHT
       // move up and set rising true if not rising but at the bottom
       Robot.SUB_ELEVATOR.riseByPercentOutput(elevatorScanSpeed);
+      rising = true;
     } else {
       // move down and set rising false if rising but at the top
       Robot.SUB_ELEVATOR.riseByPercentOutput(-1 * elevatorScanSpeed);
+      rising = false;
     }
 
   }
@@ -58,7 +60,8 @@ public class CyborgCommandFindTarget extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return (Robot.SUB_RECEIVER.getLastKnownLocation() != new int[]{-1, -1});
+    return false;
+    // return (Robot.SUB_RECEIVER.getLastKnownLocation() != new int[]{-1, -1});
   }
 
   // Called once after isFinished returns true

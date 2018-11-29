@@ -14,6 +14,8 @@ import java.net.SocketException;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Util.Util;
 
 /**
  * The receiver code that runs on the Rio to listen for UDP data
@@ -24,6 +26,8 @@ public class SubsystemReceiver extends Subsystem {
 
   private static DatagramSocket serverSocket;
   private static byte[]         receiveData;
+
+  private static long latestTime;
 
   @Override
   public void initDefaultCommand() {
@@ -36,7 +40,7 @@ public class SubsystemReceiver extends Subsystem {
       serverSocket = new DatagramSocket(3695);
       receiveData  = new byte[1024];
     } catch (SocketException e) { //thrown when a socket cannot be created
-      DriverStation.reportWarning("SOCKET EXCEPTION", false);
+      DriverStation.reportError("SOCKET EXCEPTION", true);
     }
 
     Thread listener = new Thread(() -> {
@@ -46,9 +50,10 @@ public class SubsystemReceiver extends Subsystem {
           serverSocket.receive(receivePacket); //receive the packet from the Socket
           String segment = new String(receivePacket.getData()); //create string with data to output
           latestSegment = segment;
-          System.out.println("THE PI SAYS:" + segment); 
+          latestTime = System.currentTimeMillis();
+          SmartDashboard.putString("THE PI SAYS:", segment); 
         } catch (IOException e) { //thrown when the socket cannot receive the packet
-          DriverStation.reportWarning("IO EXCEPTION", false);
+          DriverStation.reportError("IO EXCEPTION", true);
         }
       }
     });
@@ -65,14 +70,22 @@ public class SubsystemReceiver extends Subsystem {
       int[] coord = new int[2];
       
       try {
-      coord[0] = Integer.parseInt(latestSegment.substring(0, latestSegment.indexOf(",")));
-      coord[1] = Integer.parseInt(latestSegment.substring(latestSegment.indexOf(",")));
+      coord[0] = Integer.parseInt(latestSegment.split(",")[0]);
+      coord[1] = Integer.parseInt(latestSegment.split(",")[1]);
       } catch (NumberFormatException e) {
-        System.out.println("NUMBER FORMAT EXCEPTION"); 
-        System.out.println("coord[0] = " + coord[0]); 
-        System.out.println("coord[1] = " + coord[1]); 
+        DriverStation.reportError("NUMBER FORMAT EXCEPTION", true); 
+        DriverStation.reportError("coord[0] = " + coord[0], false); 
+        DriverStation.reportError("coord[1] = " + coord[1], false); 
       }
 
       return coord;
+  }
+
+  /**
+   * Returns the miliseconds since the pi sent the LastKnownLocation
+   * @return ms since last received UDP packet
+   */
+  public double getSecondsSinceUpdate() {
+    return Util.roundTo((double) ((System.currentTimeMillis() - latestTime) / 1000), 3);
   }
 }
