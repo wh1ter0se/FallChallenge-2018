@@ -7,46 +7,49 @@
 
 package frc.robot.Commands;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.OI;
 import frc.robot.Robot;
 
-public class ButtonCommandShoot extends Command {
-  public ButtonCommandShoot() {
-    requires(Robot.SUB_SHOOTER);
+/**
+ * Zeroes the elevator's encoder by lowering it until
+ * it hits the switch and then resetting the encoder
+ */
+public class CyborgCommandCalibrateElevator extends Command {
+
+  private static Boolean isFinished;
+  public CyborgCommandCalibrateElevator() {
+    requires(Robot.SUB_ELEVATOR);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.SUB_SHOOTER.setFiring(true);
-    DriverStation.reportWarning("FIRING", false);
+    isFinished = false;
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.SUB_SHOOTER.shootByJoystick(OI.DRIVER);
+    if (Robot.SUB_ELEVATOR.lowerUntilSwitch()) {
+      Robot.SUB_ELEVATOR.zeroEncoder();
+      isFinished = true;
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return isFinished;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Robot.SUB_SHOOTER.setFiring(false);
-    Robot.SUB_SHOOTER.stopShooting();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    end();
   }
 }

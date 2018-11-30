@@ -1,11 +1,16 @@
 package frc.robot;
 
 import frc.robot.Commands.ButtonCommandShoot;
+import frc.robot.Commands.CyborgCommandCalibrateElevator;
+import frc.robot.Commands.CyborgCommandFindTarget;
+import frc.robot.Commands.CyborgCommandMoveToTarget;
+import frc.robot.Commands.CyborgCommandShootByTime;
 import frc.robot.Util.JoystickController;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Sets all controls beside ManualCommands (which
@@ -30,7 +35,12 @@ public class OI {
         Button spinShooter = new JoystickButton(DRIVER, JoystickController.TRIGGER);
             spinShooter.toggleWhenPressed(new ButtonCommandShoot());
 
-            
+
+        SmartDashboard.putData("Calibrate Elevator", new CyborgCommandCalibrateElevator());
+        SmartDashboard.putData("Find Target", new CyborgCommandFindTarget());
+        SmartDashboard.putData("Move To Target", new CyborgCommandMoveToTarget());
+        SmartDashboard.putData("Shoot by Time (10s)", new CyborgCommandShootByTime(10000));
+
         DriverStation.reportWarning("OI INSTANTIATED", false);
     }
 

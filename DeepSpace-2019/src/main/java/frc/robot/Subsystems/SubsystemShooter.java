@@ -23,24 +23,34 @@ public class SubsystemShooter extends Subsystem {
 
   TalonSRX shooter;
 
+  private Boolean firing;
+
   @Override
   public void initDefaultCommand() {
   }
   
   public SubsystemShooter() {
+    firing = false;
     shooter = new TalonSRX(Constants.ShooterID);
-      shooter.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+    shooter.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
   }
 
   /**
-   * Sets the flywheel based on the axis value
-   * of the given joystick's scalar
-   * 
+   * Sets the shooter's percent output based on the 
+   * axis value of the given joystick's scalar
    * @param joy The joystick that controls the flywheel speed
    */
-  public void shootByPercent(Joystick joy) {
+  public void shootByJoystick(Joystick joy) {
     double speed = JoystickController.SCALAR(joy);
     shooter.set(ControlMode.PercentOutput, speed);
+  }
+
+  /**
+   * Sets the shooter's percent ouput to a given double
+   * @param percent the percent output of the shooter motor
+   */
+  public void shootByPercent(double percent) {
+    shooter.set(ControlMode.PercentOutput, percent);
   }
 
   /**
@@ -63,7 +73,23 @@ public class SubsystemShooter extends Subsystem {
    * @return flywheel RPM
    */
   public int getFlywheelRPM() {
-    return (int) (shooter.getSelectedSensorVelocity(0) / (2 * Math.PI));
+    return (int) (shooter.getSelectedSensorVelocity(0) * 600 / 4096); //converts u/100ms to rpm
+  }
+
+  /**
+   * Returns whether or not the flywheel talon is diabled
+   * @return flywheel talon IS in control mode other than Disabled
+   */
+  public Boolean getFiring() {
+    return firing;
+  }
+
+  /**
+   * Sets the firing boolean to a value
+   * @param firing the value that 'firing' should be
+   */
+  public void setFiring(Boolean firing) {
+    this.firing = firing;
   }
 
 }

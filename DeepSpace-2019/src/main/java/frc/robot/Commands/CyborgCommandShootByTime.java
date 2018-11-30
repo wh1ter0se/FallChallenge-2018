@@ -9,37 +9,41 @@ package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.OI;
 import frc.robot.Robot;
 
-public class ButtonCommandShoot extends Command {
-  public ButtonCommandShoot() {
+public class CyborgCommandShootByTime extends Command {
+
+  long initTimeMs;
+  long timeMs;
+
+  public CyborgCommandShootByTime(int timeMs) {
     requires(Robot.SUB_SHOOTER);
+    this.timeMs = timeMs;
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.SUB_SHOOTER.setFiring(true);
     DriverStation.reportWarning("FIRING", false);
+    initTimeMs = System.currentTimeMillis();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.SUB_SHOOTER.shootByJoystick(OI.DRIVER);
+    Robot.SUB_SHOOTER.shootByPercent(1.0);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return initTimeMs + timeMs < System.currentTimeMillis();
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Robot.SUB_SHOOTER.setFiring(false);
+    DriverStation.reportWarning("DISENGAGING TARGET", false);
     Robot.SUB_SHOOTER.stopShooting();
   }
 
@@ -47,6 +51,5 @@ public class ButtonCommandShoot extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    end();
   }
 }

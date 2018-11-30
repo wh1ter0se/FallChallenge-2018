@@ -12,7 +12,10 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Auto.CommandGroupAuto;
+import frc.robot.Enumeration.Auto;
 import frc.robot.Subsystems.SubsystemElevator;
+import frc.robot.Subsystems.SubsystemReceiver;
 import frc.robot.Subsystems.SubsystemShooter;
 import frc.robot.Subsystems.SubsystemTurret;
 
@@ -37,19 +40,19 @@ public class Robot extends IterativeRobot {
    * Instantiate the auto chooser and the string values
    * that you'll use as objects when populating the chooser
    */
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  private static final String kDefaultAuto = "Default";
-  private static final String kCustomAuto = "My Auto";
-  private String m_autoSelected;
+  SendableChooser<Auto> autoChooser;
 
   /**
    * Instantiate Subsystems
    */
   public static SubsystemElevator SUB_ELEVATOR;
+  public static SubsystemReceiver SUB_RECEIVER;
   public static SubsystemShooter  SUB_SHOOTER;
   public static SubsystemTurret   SUB_TURRET;
 
   public static OI oi;
+
+  private CommandGroupAuto auto;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -60,20 +63,27 @@ public class Robot extends IterativeRobot {
     DriverStation.reportWarning("ROBOT STARTED", false);
     DriverStation.reportWarning("GOOD LUCK, HAVE FUN", false);
     DriverStation.reportWarning("AIM FOR THE FRESHMAN", false);
-
     
-    m_chooser.addDefault("Default Auto", kDefaultAuto);
-    m_chooser.addObject("My Auto", kCustomAuto);
-    SmartDashboard.putData("Auto choices", m_chooser);
-
+    /**
+     * Set up the choosers
+     */
+    autoChooser = new SendableChooser<>();
+    autoChooser.addDefault(Auto.NOTHING.toString(), Auto.NOTHING);
+    autoChooser.addObject(Auto.SEARCH_AND_DESTROY.toString(), Auto.SEARCH_AND_DESTROY);
+    SmartDashboard.putData("Auto", autoChooser);
     DriverStation.reportWarning("CHOOSERS INSTANTIATED", false);
 
 
+    /**
+     * Set up the subsystems
+     */
     SUB_ELEVATOR = new SubsystemElevator();
+    SUB_RECEIVER = new SubsystemReceiver();
     SUB_SHOOTER  = new SubsystemShooter();
     SUB_TURRET   = new SubsystemTurret();
 
     SmartDashboard.putData("SUB_ELEVATOR", SUB_ELEVATOR);
+    SmartDashboard.putData("SUB_RECEIVER", SUB_RECEIVER);
     SmartDashboard.putData("SUB_SHOOTER", SUB_SHOOTER);
     SmartDashboard.putData("SUB_TURRET", SUB_TURRET);
 
@@ -95,10 +105,12 @@ public class Robot extends IterativeRobot {
    * LiveWindow and SmartDashboard integrated updating.
    */
   @Override
-
   public void robotPeriodic() {
     SUB_ELEVATOR.publishSwitches();
 
+    SmartDashboard.putNumber("Seconds Since Update", SUB_RECEIVER.getSecondsSinceUpdate());
+
+    SmartDashboard.putBoolean("Firing", SUB_SHOOTER.getFiring());
     SmartDashboard.putNumber("Flywheel %", SUB_SHOOTER.getPercentOutput() * 100d);
     SmartDashboard.putNumber("Flywheel RPM", SUB_SHOOTER.getFlywheelRPM());
   }
@@ -117,10 +129,8 @@ public class Robot extends IterativeRobot {
   @Override
   public void autonomousInit() {
     DriverStation.reportWarning("STARTING AUTONOMOUS", false);
-    m_autoSelected = m_chooser.getSelected();
-    // autoSelected = SmartDashboard.getString("Auto Selector",
-    // defaultAuto);
-    System.out.println("Auto selected: " + m_autoSelected);
+    auto = new CommandGroupAuto(autoChooser.getSelected());
+    auto.start();
   }
 
   /**
@@ -128,15 +138,7 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
-        break;
-      case kDefaultAuto:
-      default:
-        // Put default auto code here
-        break;
-    }
+    
   }
 
 

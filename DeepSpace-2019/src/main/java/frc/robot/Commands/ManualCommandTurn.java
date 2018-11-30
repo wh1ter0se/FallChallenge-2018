@@ -20,14 +20,12 @@ public class ManualCommandTurn extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    DriverStation.reportWarning("TURN INIT", false);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    DriverStation.reportWarning("TURN EXECUTE", false);
-    Robot.SUB_TURRET.spin(OI.DRIVER);
+    Robot.SUB_TURRET.spinByJoystick(OI.DRIVER);
   }
 
   // Make this return true when this Command no longer needs to run execute()
