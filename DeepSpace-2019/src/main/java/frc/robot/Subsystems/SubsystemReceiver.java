@@ -48,7 +48,7 @@ public class SubsystemReceiver extends Subsystem {
         try {
           DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length); //create a new packet for the receiving data 
           serverSocket.receive(receivePacket); //receive the packet from the Socket
-          String segment = new String(receivePacket.getData()); //create string with data to output
+          String segment = new String(receivePacket.getData()).replaceAll("\\s+",""); //remove whitespace and place data in 'segment'
           latestSegment = segment;
           latestTime = System.currentTimeMillis();
           SmartDashboard.putString("THE PI SAYS:", segment); 
@@ -70,8 +70,12 @@ public class SubsystemReceiver extends Subsystem {
       int[] coord = new int[2];
       
       try {
-      coord[0] = Integer.parseInt(latestSegment.split(",")[0]);
-      coord[1] = Integer.parseInt(latestSegment.split(",")[1]);
+        coord[0] = Integer.parseInt(latestSegment.split(",")[0]);
+        coord[1] = Integer.parseInt(latestSegment.split(",")[1]);
+        if (coord[0] < 0 || coord[1] < 1) { //just because we were having that weird -1,-1xx error
+          coord[0] = -1;
+          coord[1] = -1;
+        }
       } catch (NumberFormatException e) {
         DriverStation.reportError("NUMBER FORMAT EXCEPTION", true); 
         DriverStation.reportError("coord[0] = " + coord[0], false); 
