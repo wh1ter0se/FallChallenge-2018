@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
-import frc.robot.Commands.ManualCommandRise;
+import frc.robot.Commands.ManualCommandRiseByVelocity;
 import frc.robot.Util.JoystickController;
 
 /**
@@ -24,14 +24,20 @@ public class SubsystemElevator extends Subsystem {
 
   public static TalonSRX elevator;
 
+  private int lowerLimitPosition;
+  private int upperLimitPosition;
+
   @Override
   public void initDefaultCommand() {
-    setDefaultCommand(new ManualCommandRise());
+    setDefaultCommand(new ManualCommandRiseByVelocity());
   }
 
 
   public SubsystemElevator() {
     elevator = new TalonSRX(Constants.ElevatorID);
+
+    lowerLimitPosition = 0;
+    upperLimitPosition = (4096 / 4); // default to a quarter rotation
 
     setAllInverts();
   }
@@ -85,23 +91,59 @@ public class SubsystemElevator extends Subsystem {
   }
 
   /**
-   * Lowers the elevator at maximum speed with complete disregard.
+   * Lowers the elevator at a given speed.
    * The limit switch mechanically stops it, so this method doesn't
    * need to. The command calling this method should stop when
    * this method returns true.
    * 
    * @return the state of the lower limit switch
    */
-  public Boolean lowerUntilSwitch() {
-    elevator.set(ControlMode.PercentOutput, -.1);
-    return elevator.getSensorCollection().isFwdLimitSwitchClosed();
+  public Boolean lowerUntilSwitch(double speed) {
+    elevator.set(ControlMode.PercentOutput, -1 * Math.abs(speed));
+    return getLowerSwitch();
   }
 
   /**
-   * Sets the elevator encoder value to zero
+   * Raises the elevator at a given speed
+   * The limit switch mechanically stops it, so this method doesn't
+   * need to. The command calling this method should stop when
+   * this method returns true.
+   * 
+   * @return the state of the upper limit switch
+   */
+  public Boolean raiseUntilSwitch(double speed) {
+    elevator.set(ControlMode.PercentOutput, Math.abs(speed));
+    return getUpperSwitch();
+  }
+
+  /**
+   * Sets the elevator encoder to zero
    */
   public void zeroEncoder() {
     elevator.getSensorCollection().setQuadraturePosition(0, 5000);
+  }
+
+  /**
+   * Sets the upperLimitPosition int to the current encoder position
+   */
+  public void setUpperLimitPosition() {
+    upperLimitPosition = elevator.getSensorCollection().getQuadraturePosition();
+  }
+
+  /**
+   * Returns the encoder position of the lower limit
+   * @return the lowerLimitPosition int
+   */
+  public int getLowerLimitPosition() {
+    return lowerLimitPosition;
+  }
+
+  /**
+   * Returns the encoder position of the upper limit
+   * @return the upperLimitPosition int
+   */
+  public int getUpperLimitPosition() {
+    return upperLimitPosition;
   }
 
   /**

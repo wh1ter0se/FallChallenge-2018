@@ -57,11 +57,12 @@ public class Constants {
         timeoutMs              = 30;
 
     /**
-     * Scanner Speed Backup Values
+     * Autonomous Backup Values
      */
     public static final double
-        ElevatorScanSpeed = 0.6,
-        TurretScanSpeed   = 0.5;
+        ElevatorCalibrateSpeed = 0.6,
+        ElevatorScanSpeed      = 0.6,
+        TurretScanSpeed        = 0.5;
 
     /**
      * Talon IDs

@@ -9,49 +9,30 @@ package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Constants;
+import frc.robot.OI;
 import frc.robot.Robot;
 import frc.robot.Util.Util;
 
-/**
- * Zeroes the elevator's encoder by lowering it until
- * it hits the switch and then resetting the encoder
- */
-public class CyborgCommandCalibrateElevator extends Command {
-
-  private static Boolean isFinished;
-  private static Boolean lowerLimitSet;
-
-  public CyborgCommandCalibrateElevator() {
+public class ManualCommandRiseByVelocity extends Command {
+  public ManualCommandRiseByVelocity() {
     requires(Robot.SUB_ELEVATOR);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    isFinished = false;
-    lowerLimitSet = false;
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if (!lowerLimitSet) { //zeroing out the lower encoder
-      if (Robot.SUB_ELEVATOR.lowerUntilSwitch(Util.getAndSetDouble("Elevator Calibrate Speed", Constants.ElevatorCalibrateSpeed))) {
-        Robot.SUB_ELEVATOR.zeroEncoder();
-        lowerLimitSet = true;
-      }
-    } else { //setting the upper limit's encoder position
-      if (Robot.SUB_ELEVATOR.raiseUntilSwitch(Util.getAndSetDouble("Elevator Calibrate Speed", Constants.ElevatorCalibrateSpeed))) {
-        Robot.SUB_ELEVATOR.setUpperLimitPosition();
-        isFinished = true;
-      }
-    }
+    Robot.SUB_ELEVATOR.riseByJoystick(OI.DRIVER, Util.getAndSetDouble("Elevator Inhibitor", Constants.ElevatorInhibitor));
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return isFinished;
+    return false;
   }
 
   // Called once after isFinished returns true
