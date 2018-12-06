@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
+import frc.robot.Commands.ManualCommandRiseByPosition;
 import frc.robot.Commands.ManualCommandRiseByVelocity;
 import frc.robot.Util.JoystickController;
 
@@ -29,12 +30,13 @@ public class SubsystemElevator extends Subsystem {
 
   @Override
   public void initDefaultCommand() {
-    setDefaultCommand(new ManualCommandRiseByVelocity());
+    setDefaultCommand(new ManualCommandRiseByPosition());
   }
 
 
   public SubsystemElevator() {
     elevator = new TalonSRX(Constants.ElevatorID);
+    elevator.configOpenloopRamp(0, 100);
 
     lowerLimitPosition = 0;
     upperLimitPosition = (4096 / 4); // default to a quarter rotation
@@ -186,6 +188,30 @@ public class SubsystemElevator extends Subsystem {
    */
   public int getClosedLoopError() {
     return elevator.getClosedLoopError(Constants.PIDLoopID);
+  }
+
+  /**
+   * Gets the position of the elevator encoder
+   * @return turret position in encoder ticks
+   */
+  public int getEncoderPosition() {
+    return elevator.getSensorCollection().getQuadraturePosition();
+  }
+
+  /**
+   * Gets the target of the elevator encoder's PID loop
+   * @return target on elevator PID loop 0
+   */
+  public int getEncoderTarget() {
+    return elevator.getClosedLoopTarget(0);
+  }
+
+  /**
+   * Returns the percent output going to the elevator
+   * @return elevator percent output
+   */
+  public double getPercentOutput() {
+    return elevator.getMotorOutputPercent();
   }
   
 }

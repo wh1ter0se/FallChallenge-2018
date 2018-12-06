@@ -30,6 +30,7 @@ public class SubsystemTurret extends Subsystem {
 
   public SubsystemTurret() {
     turret = new TalonSRX(Constants.TurretID);
+    turret.configOpenloopRamp(0, 100);
   }
 
   /**
@@ -80,6 +81,30 @@ public class SubsystemTurret extends Subsystem {
    */
   public int getClosedLoopError() {
     return turret.getClosedLoopError(Constants.PIDLoopID);
+  }
+
+  /**
+   * Gets the position of the turret encoder
+   * @return turret position in encoder ticks
+   */
+  public int getEncoderPosition() {
+    return turret.getSensorCollection().getQuadraturePosition();
+  }
+
+  /**
+   * Gets the target of the turret encoder's PID loop
+   * @return target on turret PID loop 0
+   */
+  public int getEncoderTarget() {
+    return turret.getClosedLoopTarget(0);
+  }
+
+  /**
+   * Returns the percent output going to the turret
+   * @return turret percent output
+   */
+  public double getPercentOutput() {
+    return turret.getMotorOutputPercent();
   }
   
 }
