@@ -80,7 +80,7 @@ public class SubsystemTurret extends Subsystem {
    * Receives the units away the talon is from its target
    */
   public int getClosedLoopError() {
-    return turret.getClosedLoopError(Constants.PIDLoopID);
+    return (turret.getControlMode() == ControlMode.Position ? turret.getClosedLoopError(Constants.PIDLoopID) : -1);
   }
 
   /**
@@ -96,7 +96,7 @@ public class SubsystemTurret extends Subsystem {
    * @return target on turret PID loop 0
    */
   public int getEncoderTarget() {
-    return turret.getClosedLoopTarget(0);
+    return (turret.getControlMode() == ControlMode.Position ? turret.getClosedLoopTarget(0) : -1);
   }
 
   /**

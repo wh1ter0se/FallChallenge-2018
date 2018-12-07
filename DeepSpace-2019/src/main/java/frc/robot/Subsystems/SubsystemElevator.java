@@ -38,8 +38,8 @@ public class SubsystemElevator extends Subsystem {
     elevator = new TalonSRX(Constants.ElevatorID);
     elevator.configOpenloopRamp(0, 100);
 
-    lowerLimitPosition = 0;
-    upperLimitPosition = (4096 / 4); // default to a quarter rotation
+    lowerLimitPosition = (25/360) * 4096; // estimated 25 degree value
+    upperLimitPosition = 0;
 
     setAllInverts();
   }
@@ -128,8 +128,8 @@ public class SubsystemElevator extends Subsystem {
   /**
    * Sets the upperLimitPosition int to the current encoder position
    */
-  public void setUpperLimitPosition() {
-    upperLimitPosition = elevator.getSensorCollection().getQuadraturePosition();
+  public void setLowerLimitPosition() {
+    lowerLimitPosition = elevator.getSensorCollection().getQuadraturePosition();
   }
 
   /**
@@ -187,7 +187,7 @@ public class SubsystemElevator extends Subsystem {
    * Receives the units away the talon is from its target
    */
   public int getClosedLoopError() {
-    return elevator.getClosedLoopError(Constants.PIDLoopID);
+    return (elevator.getControlMode() == ControlMode.Position ? elevator.getClosedLoopError(Constants.PIDLoopID) : -1);
   }
 
   /**
@@ -203,7 +203,7 @@ public class SubsystemElevator extends Subsystem {
    * @return target on elevator PID loop 0
    */
   public int getEncoderTarget() {
-    return elevator.getClosedLoopTarget(0);
+    return (elevator.getControlMode() == ControlMode.Position ? elevator.getClosedLoopTarget(Constants.PIDLoopID): -1);
   }
 
   /**

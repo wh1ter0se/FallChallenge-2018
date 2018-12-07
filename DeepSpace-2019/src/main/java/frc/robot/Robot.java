@@ -82,11 +82,6 @@ public class Robot extends IterativeRobot {
     SUB_SHOOTER  = new SubsystemShooter();
     SUB_TURRET   = new SubsystemTurret();
 
-    SmartDashboard.putData("SUB_ELEVATOR", SUB_ELEVATOR);
-    SmartDashboard.putData("SUB_RECEIVER", SUB_RECEIVER);
-    SmartDashboard.putData("SUB_SHOOTER", SUB_SHOOTER);
-    SmartDashboard.putData("SUB_TURRET", SUB_TURRET);
-
     DriverStation.reportWarning("SUBSYSTEMS INSTANTIATED", false);
     
 
@@ -123,6 +118,11 @@ public class Robot extends IterativeRobot {
     SmartDashboard.putBoolean("Firing", SUB_SHOOTER.getFiring());
     SmartDashboard.putNumber("Flywheel %", SUB_SHOOTER.getPercentOutput() * 100d);
     SmartDashboard.putNumber("Flywheel RPM", SUB_SHOOTER.getFlywheelRPM());
+
+    SmartDashboard.putData("SUB_ELEVATOR", SUB_ELEVATOR);
+    SmartDashboard.putData("SUB_RECEIVER", SUB_RECEIVER);
+    SmartDashboard.putData("SUB_SHOOTER", SUB_SHOOTER);
+    SmartDashboard.putData("SUB_TURRET", SUB_TURRET);
   }
 
   /**

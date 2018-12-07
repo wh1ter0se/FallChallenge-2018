@@ -7,6 +7,7 @@
 
 package frc.robot.Commands;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Constants;
 import frc.robot.OI;
@@ -36,9 +37,10 @@ public class ManualCommandRiseByPosition extends Command {
       Util.getAndSetDouble("Elevator Position kI", Constants.elevatorPositionI),
       Util.getAndSetDouble("Elevator Position kD", Constants.elevatorPositionD),
       Util.getAndSetDouble("Elevator Position kF", Constants.elevatorPositionF));
-    position = (int)((Robot.SUB_ELEVATOR.getUpperLimitPosition() - Robot.SUB_ELEVATOR.getLowerLimitPosition()) * ((JoystickController.Y_AXIS(OI.DRIVER) + 1) / 2));
+    position = (int)(Math.abs(Robot.SUB_ELEVATOR.getLowerLimitPosition() - Robot.SUB_ELEVATOR.getUpperLimitPosition()) * ((JoystickController.Y_AXIS(OI.DRIVER) + 1) / 2));
     Robot.SUB_ELEVATOR.riseByPosition(position); //position = encoder range (max - min) times the absolute value of the y-axis
     //the -1 is there because encoder counting is not inverted
+    DriverStation.reportWarning("Position:" + position, false);
   }
 
   // Make this return true when this Command no longer needs to run execute()
