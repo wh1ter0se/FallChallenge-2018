@@ -20,6 +20,7 @@ public class CyborgCommandFindTarget extends Command {
     requires(Robot.SUB_TURRET);
   }
 
+  private Boolean isFinished;
   private Boolean rising;
 
   // Called just before this Command runs the first time
@@ -27,6 +28,7 @@ public class CyborgCommandFindTarget extends Command {
   protected void initialize() {
     DriverStation.reportWarning("FINDING TARGET", false);
 
+    isFinished = false;
     rising = true;
   }
 
@@ -55,12 +57,18 @@ public class CyborgCommandFindTarget extends Command {
       rising = false;
     }
 
+    if (Robot.SUB_RECEIVER.getLastKnownLocation()[0] != -1 && Robot.SUB_RECEIVER.getLastKnownLocation()[1] !=1) {
+      DriverStation.reportWarning("coord[0] = " + Robot.SUB_RECEIVER.getLastKnownLocation()[0], false);
+      DriverStation.reportWarning("coord[1] = " + Robot.SUB_RECEIVER.getLastKnownLocation()[1], false);
+      isFinished = true;
+    }
+
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return isFinished;
     // return (Robot.SUB_RECEIVER.getLastKnownLocation() != new int[]{-1, -1});
   }
 
