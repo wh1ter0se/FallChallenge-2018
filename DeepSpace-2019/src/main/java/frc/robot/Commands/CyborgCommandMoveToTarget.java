@@ -47,14 +47,18 @@ public class CyborgCommandMoveToTarget extends Command {
     target = Robot.SUB_RECEIVER.getLastKnownLocation();
 
     //pixelsPerTick = pixelsPerRotation / ticksPerRotation
-    horizontalTicksPerPixel = ((360 / Constants.HorizontalFOV) * Constants.CameraWidth) / Constants.EncoderTicksPerRotation;
-    verticalTicksPerPixel   = ((360 / Constants.VerticalFOV) * Constants.CameraHeight) / Constants.EncoderTicksPerRotation;
+    horizontalTicksPerPixel = ((Constants.HorizontalFOV / 360) * Constants.CameraWidth) / Constants.EncoderTicksPerRotation;
+    verticalTicksPerPixel   = ((Constants.VerticalFOV / 360) * Constants.CameraHeight) / Constants.EncoderTicksPerRotation;
 
     horizontalTicksAway = -1 * (int) ((centerpoint[0] - target[0]) * horizontalTicksPerPixel);
     verticalTicksAway   = -1 * (int) ((centerpoint[0] - target[0]) * verticalTicksPerPixel);
 
     // the -1 is because encoder positions aren't inverted
-    
+  }
+
+  // Called repeatedly when this Command is scheduled to run
+  @Override
+  protected void execute() {
     Robot.SUB_ELEVATOR.setPIDF(
       Util.getAndSetDouble("Elevator Position kP", Constants.elevatorPositionP),
       Util.getAndSetDouble("Elevator Position kI", Constants.elevatorPositionI),
@@ -68,11 +72,7 @@ public class CyborgCommandMoveToTarget extends Command {
 
     Robot.SUB_ELEVATOR.riseByPosition(Robot.SUB_ELEVATOR.getEncoderPosition() + verticalTicksAway);
     Robot.SUB_TURRET.spinByPosition(Robot.SUB_TURRET.getEncoderPosition() + horizontalTicksAway);
-  }
 
-  // Called repeatedly when this Command is scheduled to run
-  @Override
-  protected void execute() {
     isFinished = Robot.SUB_ELEVATOR.getClosedLoopError() < Constants.allowablePositionError &&
                  Robot.SUB_TURRET.getClosedLoopError() < Constants.allowablePositionError;
   }

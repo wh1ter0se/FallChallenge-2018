@@ -28,6 +28,11 @@ public class SubsystemElevator extends Subsystem {
   private int lowerLimitPosition;
   private int upperLimitPosition;
 
+  private double P;
+  private double I;
+  private double D;
+  private double F;
+
   @Override
   public void initDefaultCommand() {
     setDefaultCommand(new ManualCommandRiseByVelocity());
@@ -180,7 +185,20 @@ public class SubsystemElevator extends Subsystem {
     elevator.config_kF(Constants.PIDLoopID, P, Constants.timeoutMs);
 		elevator.config_kP(Constants.PIDLoopID, I, Constants.timeoutMs);
 		elevator.config_kI(Constants.PIDLoopID, D, Constants.timeoutMs);
-		elevator.config_kD(Constants.PIDLoopID, F, Constants.timeoutMs);
+    elevator.config_kD(Constants.PIDLoopID, F, Constants.timeoutMs);
+      this.P = P;
+      this.I = I;
+      this.D = D;
+      this.F = F;
+  }
+
+  public double[] getPIDF() {
+    double[] PIDF = new double[4];
+    PIDF[0] = P;
+    PIDF[1] = I;
+    PIDF[2] = D;
+    PIDF[3] = F;
+    return PIDF;
   }
 
   /**

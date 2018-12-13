@@ -35,10 +35,13 @@ public class CyborgCommandFindTarget extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    /**
-     * Rotates the turret at a constant percent output
-     */
-    Robot.SUB_TURRET.spinByPercentOutput(Util.getAndSetDouble("Turret Scan Speed", Constants.TurretScanSpeed));
+    //Robot.SUB_TURRET.spinByPercentOutput(Util.getAndSetDouble("Turret Scan Speed", Constants.TurretScanSpeed));
+    Robot.SUB_TURRET.spinByVelocity(Util.RPMToNative(Util.getAndSetDouble("Turret Scan RPM", Constants.TurretScanVelocity)));
+    Robot.SUB_TURRET.setPIDF(
+      Util.getAndSetDouble("Turret Velocity kP", Constants.elevatorPositionP),
+      Util.getAndSetDouble("Turret Velocity kI", Constants.elevatorPositionI),
+      Util.getAndSetDouble("Turret Velocity kD", Constants.elevatorPositionD),
+      Util.getAndSetDouble("Turret Velocity kF", Constants.elevatorPositionF));
     
     /**
      * Makes the elevator go up and down repeatedly
@@ -78,7 +81,9 @@ public class CyborgCommandFindTarget extends Command {
     Robot.SUB_ELEVATOR.stopRising();
     Robot.SUB_TURRET.stopSpinning();
 
+    Robot.SUB_TURRET.setLastSeenPosition();
     DriverStation.reportWarning("ENEMY SPOTTED", false); //I couldn't help myself
+    DriverStation.reportWarning("TURRET POSITION: " + Robot.SUB_TURRET.getEncoderPosition(), false); //I couldn't help myself
   }
 
   // Called when another command which requires one or more of the same

@@ -52,7 +52,7 @@ public class Constants {
      * PIDF-Related Values
      */
     public static final int
-        allowablePositionError = 100,
+        allowablePositionError = 10,
         PIDLoopID              = 0,
         timeoutMs              = 30;
 
@@ -62,7 +62,8 @@ public class Constants {
     public static final double
         ElevatorCalibrateSpeed = 0.6,
         ElevatorScanSpeed      = 0.6,
-        TurretScanSpeed        = 0.5;
+        TurretScanSpeed        = 0.5,
+        TurretScanVelocity     = 0;
 
     /**
      * Talon IDs

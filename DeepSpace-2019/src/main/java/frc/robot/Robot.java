@@ -114,10 +114,29 @@ public class Robot extends IterativeRobot {
     SmartDashboard.putNumber("Turret Error", SUB_TURRET.getClosedLoopError());
     SmartDashboard.putNumber("Turret Target", SUB_TURRET.getEncoderTarget());
     SmartDashboard.putNumber("Turret %", SUB_TURRET.getPercentOutput());
+
+    SmartDashboard.putNumber("Turret Velocity", SUB_TURRET.getVelocity());
+    SmartDashboard.putNumber("Turret Velocity Error", SUB_TURRET.getVelocityError());
+    SmartDashboard.putNumber("Turret Velocity Target", SUB_TURRET.getVelocityTarget());
     
     SmartDashboard.putBoolean("Firing", SUB_SHOOTER.getFiring());
     SmartDashboard.putNumber("Flywheel %", SUB_SHOOTER.getPercentOutput() * 100d);
     SmartDashboard.putNumber("Flywheel RPM", SUB_SHOOTER.getFlywheelRPM());
+
+    SmartDashboard.putNumber("E-P", SUB_ELEVATOR.getPIDF()[0]);
+    SmartDashboard.putNumber("E-I", SUB_ELEVATOR.getPIDF()[1]);
+    SmartDashboard.putNumber("E-D", SUB_ELEVATOR.getPIDF()[2]);
+    SmartDashboard.putNumber("E-F", SUB_ELEVATOR.getPIDF()[3]);
+
+    SmartDashboard.putNumber("S-P", SUB_SHOOTER.getPIDF()[0]);
+    SmartDashboard.putNumber("S-I", SUB_SHOOTER.getPIDF()[1]);
+    SmartDashboard.putNumber("S-D", SUB_SHOOTER.getPIDF()[2]);
+    SmartDashboard.putNumber("S-F", SUB_SHOOTER.getPIDF()[3]);
+
+    SmartDashboard.putNumber("T-P", SUB_TURRET.getPIDF()[0]);
+    SmartDashboard.putNumber("T-I", SUB_TURRET.getPIDF()[1]);
+    SmartDashboard.putNumber("T-D", SUB_TURRET.getPIDF()[2]);
+    SmartDashboard.putNumber("T-F", SUB_TURRET.getPIDF()[3]);
 
     SmartDashboard.putData("SUB_ELEVATOR", SUB_ELEVATOR);
     SmartDashboard.putData("SUB_RECEIVER", SUB_RECEIVER);

@@ -4,6 +4,7 @@ import frc.robot.Commands.ButtonCommandShoot;
 import frc.robot.Commands.CyborgCommandCalibrateElevator;
 import frc.robot.Commands.CyborgCommandFindTarget;
 import frc.robot.Commands.CyborgCommandMoveToTarget;
+import frc.robot.Commands.CyborgCommandOpeGoBack;
 import frc.robot.Commands.CyborgCommandShootByTime;
 import frc.robot.Util.JoystickController;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -39,6 +40,7 @@ public class OI {
         SmartDashboard.putData("Calibrate Elevator", new CyborgCommandCalibrateElevator());
         SmartDashboard.putData("Find Target", new CyborgCommandFindTarget());
         SmartDashboard.putData("Move To Target", new CyborgCommandMoveToTarget());
+        SmartDashboard.putData("Ope Go Back", new CyborgCommandOpeGoBack());
         SmartDashboard.putData("Shoot by Time (10s)", new CyborgCommandShootByTime(10000));
 
         DriverStation.reportWarning("OI INSTANTIATED", false);
