@@ -51,6 +51,7 @@ public class Robot extends IterativeRobot {
   public static SubsystemTurret   SUB_TURRET;
 
   public static OI oi;
+  public static Vision vision;
 
   private CommandGroupAuto auto;
 
@@ -81,6 +82,8 @@ public class Robot extends IterativeRobot {
     SUB_RECEIVER = new SubsystemReceiver();
     SUB_SHOOTER  = new SubsystemShooter();
     SUB_TURRET   = new SubsystemTurret();
+    vision = new Vision();
+    vision.startFrameCameraThread();
 
     DriverStation.reportWarning("SUBSYSTEMS INSTANTIATED", false);
     

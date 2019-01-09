@@ -73,4 +73,15 @@ public class Constants {
         TurretID   = 1,
         ShooterID  = 2;
 
+        public static class VisionConstants {
+            public static final int CAM_HEIGHT = 1080;
+            public static final int CAM_WIDTH  = 1920;
+    
+            public static final int SCREW_ID = 0;
+            public static final int HOOK_ID = 0;
+            public static final int	LEFT_ID = 2;
+            public static final int RIGHT_ID = 3;
+    
+        }
+
 }
