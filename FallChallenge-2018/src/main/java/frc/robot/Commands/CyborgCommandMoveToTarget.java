@@ -9,6 +9,7 @@ package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.Util.Util;
@@ -46,12 +47,18 @@ public class CyborgCommandMoveToTarget extends Command {
     target = Robot.SUB_RECEIVER.getLastKnownLocation();
 
     //pixelsPerTick = pixelsPerRotation / ticksPerRotation
-    horizontalTicksPerPixel = ((360 / Constants.HorizontalFOV) * Constants.CameraWidth) / Constants.EncoderTicksPerRotation;
-    verticalTicksPerPixel = ((360 / Constants.VerticalFOV) * Constants.CameraHeight) / Constants.EncoderTicksPerRotation;
+    horizontalTicksPerPixel = ((Constants.HorizontalFOV / 360) * Constants.CameraWidth) / Constants.EncoderTicksPerRotation;
+    verticalTicksPerPixel   = ((Constants.VerticalFOV / 360) * Constants.CameraHeight) / Constants.EncoderTicksPerRotation;
 
-    horizontalTicksAway = (int) ((centerpoint[0] - target[0]) * horizontalTicksPerPixel);
-    verticalTicksAway = (int) ((centerpoint[0] - target[0]) * verticalTicksPerPixel);
+    horizontalTicksAway = -1 * (int) ((centerpoint[0] - target[0]) * horizontalTicksPerPixel);
+    verticalTicksAway   = -1 * (int) ((centerpoint[0] - target[0]) * verticalTicksPerPixel);
 
+    // the -1 is because encoder positions aren't inverted
+  }
+
+  // Called repeatedly when this Command is scheduled to run
+  @Override
+  protected void execute() {
     Robot.SUB_ELEVATOR.setPIDF(
       Util.getAndSetDouble("Elevator Position kP", Constants.elevatorPositionP),
       Util.getAndSetDouble("Elevator Position kI", Constants.elevatorPositionI),
@@ -63,15 +70,8 @@ public class CyborgCommandMoveToTarget extends Command {
       Util.getAndSetDouble("Turret Position kD", Constants.turretPositionD),
       Util.getAndSetDouble("Turret Position kF", Constants.turretPositionF));
 
-    Robot.SUB_ELEVATOR.riseByPosition(verticalTicksAway);
-    Robot.SUB_TURRET.spinByPosition(horizontalTicksAway);
-  }
-
-  // Called repeatedly when this Command is scheduled to run
-  @Override
-  protected void execute() {
-    DriverStation.reportWarning("Elevator Error: " + Robot.SUB_ELEVATOR.getClosedLoopError(), false);
-    DriverStation.reportWarning("Turret Error: " + Robot.SUB_TURRET.getClosedLoopError(), false);
+    Robot.SUB_ELEVATOR.riseByPosition(Robot.SUB_ELEVATOR.getEncoderPosition() + verticalTicksAway);
+    Robot.SUB_TURRET.spinByPosition(Robot.SUB_TURRET.getEncoderPosition() + horizontalTicksAway);
 
     isFinished = Robot.SUB_ELEVATOR.getClosedLoopError() < Constants.allowablePositionError &&
                  Robot.SUB_TURRET.getClosedLoopError() < Constants.allowablePositionError;

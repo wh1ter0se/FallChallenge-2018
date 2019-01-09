@@ -52,16 +52,18 @@ public class Constants {
      * PIDF-Related Values
      */
     public static final int
-        allowablePositionError = 100,
+        allowablePositionError = 10,
         PIDLoopID              = 0,
         timeoutMs              = 30;
 
     /**
-     * Scanner Speed Backup Values
+     * Autonomous Backup Values
      */
     public static final double
-        ElevatorScanSpeed = 0.6,
-        TurretScanSpeed   = 0.5;
+        ElevatorCalibrateSpeed = 0.6,
+        ElevatorScanSpeed      = 0.6,
+        TurretScanSpeed        = 0.5,
+        TurretScanVelocity     = 0;
 
     /**
      * Talon IDs
@@ -70,5 +72,16 @@ public class Constants {
         ElevatorID = 0,
         TurretID   = 1,
         ShooterID  = 2;
+
+        public static class VisionConstants {
+            public static final int CAM_HEIGHT = 1080;
+            public static final int CAM_WIDTH  = 1920;
+    
+            public static final int SCREW_ID = 0;
+            public static final int HOOK_ID = 0;
+            public static final int	LEFT_ID = 2;
+            public static final int RIGHT_ID = 3;
+    
+        }
 
 }

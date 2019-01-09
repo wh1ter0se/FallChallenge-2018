@@ -10,6 +10,7 @@ package frc.robot.Auto;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.Commands.CyborgCommandFindTarget;
 import frc.robot.Commands.CyborgCommandMoveToTarget;
+import frc.robot.Commands.CyborgCommandOpeGoBack;
 import frc.robot.Commands.CyborgCommandShootByTime;
 import frc.robot.Enumeration.Auto;
 
@@ -25,7 +26,7 @@ public class CommandGroupAuto extends CommandGroup {
         break;
       case SEARCH_AND_DESTROY:
         addSequential(new CyborgCommandFindTarget());
-        addSequential(new CyborgCommandMoveToTarget());
+        addSequential(new CyborgCommandOpeGoBack());
         addSequential(new CyborgCommandShootByTime(7500));
         break;
     }

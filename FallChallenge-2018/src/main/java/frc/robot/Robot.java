@@ -51,6 +51,7 @@ public class Robot extends IterativeRobot {
   public static SubsystemTurret   SUB_TURRET;
 
   public static OI oi;
+  public static Vision vision;
 
   private CommandGroupAuto auto;
 
@@ -81,11 +82,8 @@ public class Robot extends IterativeRobot {
     SUB_RECEIVER = new SubsystemReceiver();
     SUB_SHOOTER  = new SubsystemShooter();
     SUB_TURRET   = new SubsystemTurret();
-
-    SmartDashboard.putData("SUB_ELEVATOR", SUB_ELEVATOR);
-    SmartDashboard.putData("SUB_RECEIVER", SUB_RECEIVER);
-    SmartDashboard.putData("SUB_SHOOTER", SUB_SHOOTER);
-    SmartDashboard.putData("SUB_TURRET", SUB_TURRET);
+    vision = new Vision();
+    vision.startFrameCameraThread();
 
     DriverStation.reportWarning("SUBSYSTEMS INSTANTIATED", false);
     
@@ -110,9 +108,43 @@ public class Robot extends IterativeRobot {
 
     SmartDashboard.putNumber("Seconds Since Update", SUB_RECEIVER.getSecondsSinceUpdate());
 
+    SmartDashboard.putNumber("Elevator Error", SUB_ELEVATOR.getClosedLoopError());
+    SmartDashboard.putNumber("Elevator Position", SUB_ELEVATOR.getEncoderPosition());    
+    SmartDashboard.putNumber("Elevator Target", SUB_ELEVATOR.getEncoderTarget());
+    SmartDashboard.putNumber("Elevator %", SUB_ELEVATOR.getPercentOutput());
+
+    SmartDashboard.putNumber("Turret Position", SUB_TURRET.getEncoderPosition());
+    SmartDashboard.putNumber("Turret Error", SUB_TURRET.getClosedLoopError());
+    SmartDashboard.putNumber("Turret Target", SUB_TURRET.getEncoderTarget());
+    SmartDashboard.putNumber("Turret %", SUB_TURRET.getPercentOutput());
+
+    SmartDashboard.putNumber("Turret Velocity", SUB_TURRET.getVelocity());
+    SmartDashboard.putNumber("Turret Velocity Error", SUB_TURRET.getVelocityError());
+    SmartDashboard.putNumber("Turret Velocity Target", SUB_TURRET.getVelocityTarget());
+    
     SmartDashboard.putBoolean("Firing", SUB_SHOOTER.getFiring());
     SmartDashboard.putNumber("Flywheel %", SUB_SHOOTER.getPercentOutput() * 100d);
     SmartDashboard.putNumber("Flywheel RPM", SUB_SHOOTER.getFlywheelRPM());
+
+    SmartDashboard.putNumber("E-P", SUB_ELEVATOR.getPIDF()[0]);
+    SmartDashboard.putNumber("E-I", SUB_ELEVATOR.getPIDF()[1]);
+    SmartDashboard.putNumber("E-D", SUB_ELEVATOR.getPIDF()[2]);
+    SmartDashboard.putNumber("E-F", SUB_ELEVATOR.getPIDF()[3]);
+
+    SmartDashboard.putNumber("S-P", SUB_SHOOTER.getPIDF()[0]);
+    SmartDashboard.putNumber("S-I", SUB_SHOOTER.getPIDF()[1]);
+    SmartDashboard.putNumber("S-D", SUB_SHOOTER.getPIDF()[2]);
+    SmartDashboard.putNumber("S-F", SUB_SHOOTER.getPIDF()[3]);
+
+    SmartDashboard.putNumber("T-P", SUB_TURRET.getPIDF()[0]);
+    SmartDashboard.putNumber("T-I", SUB_TURRET.getPIDF()[1]);
+    SmartDashboard.putNumber("T-D", SUB_TURRET.getPIDF()[2]);
+    SmartDashboard.putNumber("T-F", SUB_TURRET.getPIDF()[3]);
+
+    SmartDashboard.putData("SUB_ELEVATOR", SUB_ELEVATOR);
+    SmartDashboard.putData("SUB_RECEIVER", SUB_RECEIVER);
+    SmartDashboard.putData("SUB_SHOOTER", SUB_SHOOTER);
+    SmartDashboard.putData("SUB_TURRET", SUB_TURRET);
   }
 
   /**

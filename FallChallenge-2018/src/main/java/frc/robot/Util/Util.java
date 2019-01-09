@@ -37,4 +37,12 @@ public class Util {
         val /= Math.pow(10, places);
         return val;
     }
+
+    public static double RPMToNative(double RPM) {
+        return (RPM * 4096) / 600;
+    }
+
+    public static double nativeToRPM(double nativeUnits) {
+        return (nativeUnits * 600) / 4096;
+    }
 }

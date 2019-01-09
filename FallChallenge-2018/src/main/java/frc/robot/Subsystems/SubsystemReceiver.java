@@ -35,6 +35,9 @@ public class SubsystemReceiver extends Subsystem {
 
   public SubsystemReceiver() {
     latestSegment = "-1,-1";
+    latestTime    = System.currentTimeMillis();
+
+    SmartDashboard.putString("RPi Coordinate", "null");
 
     try {
       serverSocket = new DatagramSocket(3695);
@@ -48,10 +51,10 @@ public class SubsystemReceiver extends Subsystem {
         try {
           DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length); //create a new packet for the receiving data 
           serverSocket.receive(receivePacket); //receive the packet from the Socket
-          String segment = new String(receivePacket.getData()); //create string with data to output
+          String segment = new String(receivePacket.getData()).replaceAll("\\s+",""); //remove whitespace and place data in 'segment'
           latestSegment = segment;
           latestTime = System.currentTimeMillis();
-          SmartDashboard.putString("THE PI SAYS:", segment); 
+          SmartDashboard.putString("RPi Coordinate", segment.substring(0,segment.indexOf("A"))); 
         } catch (IOException e) { //thrown when the socket cannot receive the packet
           DriverStation.reportError("IO EXCEPTION", true);
         }
@@ -70,12 +73,20 @@ public class SubsystemReceiver extends Subsystem {
       int[] coord = new int[2];
       
       try {
-      coord[0] = Integer.parseInt(latestSegment.split(",")[0]);
-      coord[1] = Integer.parseInt(latestSegment.split(",")[1]);
+        coord[0] = Integer.parseInt(latestSegment.substring(0, latestSegment.indexOf(",")));
+        coord[1] = Integer.parseInt(latestSegment.substring(latestSegment.indexOf(",") + 1, latestSegment.indexOf("A")));
+        if (coord[0] < 0 || coord[1] < 1) { //just because we were having that weird -1,-1xx error
+          coord[0] = -1;
+          coord[1] = -1;
+        }
       } catch (NumberFormatException e) {
         DriverStation.reportError("NUMBER FORMAT EXCEPTION", true); 
         DriverStation.reportError("coord[0] = " + coord[0], false); 
         DriverStation.reportError("coord[1] = " + coord[1], false); 
+      } catch (StringIndexOutOfBoundsException e) {
+        DriverStation.reportError("STRING INDEX OUT OF BOUNDS EXCEPTION", true);
+        DriverStation.reportError("FIRST INDEX = " + (latestSegment.indexOf(",") + 1), false);
+        DriverStation.reportError("SECOND INDEX = " + latestSegment.indexOf(";"), false);
       }
 
       return coord;
@@ -86,6 +97,6 @@ public class SubsystemReceiver extends Subsystem {
    * @return ms since last received UDP packet
    */
   public double getSecondsSinceUpdate() {
-    return Util.roundTo((double) ((System.currentTimeMillis() - latestTime) / 1000), 3);
+    return Util.roundTo((double) ((System.currentTimeMillis() - latestTime) / 1000), 5);
   }
 }

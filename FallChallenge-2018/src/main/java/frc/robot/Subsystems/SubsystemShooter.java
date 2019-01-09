@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.Constants;
 import frc.robot.Util.JoystickController;
+import frc.robot.Util.Util;
 
 /**
  * Controls the flywheel motor
@@ -24,6 +25,11 @@ public class SubsystemShooter extends Subsystem {
   TalonSRX shooter;
 
   private Boolean firing;
+
+  private double P;
+  private double I;
+  private double D;
+  private double F;
 
   @Override
   public void initDefaultCommand() {
@@ -73,7 +79,7 @@ public class SubsystemShooter extends Subsystem {
    * @return flywheel RPM
    */
   public int getFlywheelRPM() {
-    return (int) (shooter.getSelectedSensorVelocity(0) * 600 / 4096); //converts u/100ms to rpm
+    return (int) Util.nativeToRPM(shooter.getSelectedSensorVelocity(0)); //converts u/100ms to rpm
   }
 
   /**
@@ -90,6 +96,29 @@ public class SubsystemShooter extends Subsystem {
    */
   public void setFiring(Boolean firing) {
     this.firing = firing;
+  }
+
+  /**
+   * Sets the shooter talon's PIDF values
+   */
+  public void setPIDF(double P, double I, double D, double F) {
+    shooter.config_kF(Constants.PIDLoopID, P, Constants.timeoutMs);
+		shooter.config_kP(Constants.PIDLoopID, I, Constants.timeoutMs);
+		shooter.config_kI(Constants.PIDLoopID, D, Constants.timeoutMs);
+    shooter.config_kD(Constants.PIDLoopID, F, Constants.timeoutMs);
+      this.P = P;
+      this.I = I;
+      this.D = D;
+      this.F = F;
+  }
+
+  public double[] getPIDF() {
+    double[] PIDF = new double[4];
+    PIDF[0] = P;
+    PIDF[1] = I;
+    PIDF[2] = D;
+    PIDF[3] = F;
+    return PIDF;
   }
 
 }

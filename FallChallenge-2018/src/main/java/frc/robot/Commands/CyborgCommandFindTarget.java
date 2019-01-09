@@ -20,6 +20,7 @@ public class CyborgCommandFindTarget extends Command {
     requires(Robot.SUB_TURRET);
   }
 
+  private Boolean isFinished;
   private Boolean rising;
 
   // Called just before this Command runs the first time
@@ -27,16 +28,20 @@ public class CyborgCommandFindTarget extends Command {
   protected void initialize() {
     DriverStation.reportWarning("FINDING TARGET", false);
 
+    isFinished = false;
     rising = true;
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    /**
-     * Rotates the turret at a constant percent output
-     */
-    Robot.SUB_TURRET.spinByPercentOutput(Util.getAndSetDouble("Turret Scan Speed", Constants.TurretScanSpeed));
+    //Robot.SUB_TURRET.spinByPercentOutput(Util.getAndSetDouble("Turret Scan Speed", Constants.TurretScanSpeed));
+    Robot.SUB_TURRET.spinByVelocity(Util.RPMToNative(Util.getAndSetDouble("Turret Scan RPM", Constants.TurretScanVelocity)));
+    Robot.SUB_TURRET.setPIDF(
+      Util.getAndSetDouble("Turret Velocity kP", Constants.elevatorPositionP),
+      Util.getAndSetDouble("Turret Velocity kI", Constants.elevatorPositionI),
+      Util.getAndSetDouble("Turret Velocity kD", Constants.elevatorPositionD),
+      Util.getAndSetDouble("Turret Velocity kF", Constants.elevatorPositionF));
     
     /**
      * Makes the elevator go up and down repeatedly
@@ -55,12 +60,18 @@ public class CyborgCommandFindTarget extends Command {
       rising = false;
     }
 
+    if (Robot.SUB_RECEIVER.getLastKnownLocation()[0] != -1 && Robot.SUB_RECEIVER.getLastKnownLocation()[1] !=1) {
+      DriverStation.reportWarning("coord[0] = " + Robot.SUB_RECEIVER.getLastKnownLocation()[0], false);
+      DriverStation.reportWarning("coord[1] = " + Robot.SUB_RECEIVER.getLastKnownLocation()[1], false);
+      isFinished = true;
+    }
+
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return isFinished;
     // return (Robot.SUB_RECEIVER.getLastKnownLocation() != new int[]{-1, -1});
   }
 
@@ -70,7 +81,9 @@ public class CyborgCommandFindTarget extends Command {
     Robot.SUB_ELEVATOR.stopRising();
     Robot.SUB_TURRET.stopSpinning();
 
+    Robot.SUB_TURRET.setLastSeenPosition();
     DriverStation.reportWarning("ENEMY SPOTTED", false); //I couldn't help myself
+    DriverStation.reportWarning("TURRET POSITION: " + Robot.SUB_TURRET.getEncoderPosition(), false); //I couldn't help myself
   }
 
   // Called when another command which requires one or more of the same
